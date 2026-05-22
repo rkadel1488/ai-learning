@@ -39,9 +39,9 @@ export type Database = {
         Relationships: []
       }
       questions: {
-        Row: { id: string; topic_id: string; track: Track; type: QuestionType; order_index: number; prompt: string; options: string[]; correct_answer: string; explanation: string; created_at: string }
-        Insert: { topic_id: string; track: Track; type: QuestionType; order_index: number; prompt: string; options: string[]; correct_answer: string; explanation: string }
-        Update: { topic_id?: string; track?: Track; type?: QuestionType; order_index?: number; prompt?: string; options?: string[]; correct_answer?: string; explanation?: string }
+        Row: { id: string; topic_id: string; track: Track; type: QuestionType; order_index: number; prompt: string; options: string[]; correct_answer: string; explanation: string; is_free: boolean; created_at: string }
+        Insert: { topic_id: string; track: Track; type: QuestionType; order_index: number; prompt: string; options: string[]; correct_answer: string; explanation: string; is_free?: boolean }
+        Update: { topic_id?: string; track?: Track; type?: QuestionType; order_index?: number; prompt?: string; options?: string[]; correct_answer?: string; explanation?: string; is_free?: boolean }
         Relationships: []
       }
       progress: {
