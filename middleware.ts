@@ -43,7 +43,18 @@ export async function middleware(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    const dest = profile?.role === 'teacher' ? '/teacher/dashboard' : '/dashboard'
+    if (profile?.role === 'teacher') {
+      return NextResponse.redirect(new URL('/teacher/dashboard', request.url))
+    }
+
+    // Check if parent has children yet
+    const { data: children } = await supabase
+      .from('children')
+      .select('id')
+      .eq('parent_id', user.id)
+      .limit(1)
+
+    const dest = children && children.length > 0 ? '/dashboard' : '/onboarding'
     return NextResponse.redirect(new URL(dest, request.url))
   }
 
