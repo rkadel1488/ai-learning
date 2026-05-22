@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildChildInsert, buildClassInsert, generateJoinCode } from '@/lib/actions/onboarding'
+import { buildChildInsert, buildClassInsert, generateJoinCode } from '@/lib/onboarding-utils'
 
 describe('buildChildInsert', () => {
   it('maps age 7 to story track', () => {
