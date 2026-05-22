@@ -135,6 +135,13 @@ alter table public.purchases enable row level security;
 create policy "User can read own purchases" on public.purchases
   for select using (auth.uid() = user_id);
 
+-- Topics and questions are seeded/read-only — allow public SELECT
+alter table public.topics enable row level security;
+create policy "Topics are publicly readable" on public.topics for select using (true);
+
+alter table public.questions enable row level security;
+create policy "Questions are publicly readable" on public.questions for select using (true);
+
 -- Seed: 10 topics in order
 insert into public.topics (order_index, title, icon, tier) values
   (1,  'Logic & Boolean Algebra',    '⚡', 'foundation'),

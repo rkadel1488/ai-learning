@@ -74,8 +74,13 @@ export default async function LearnPage({ params }: Props) {
     )
   }
 
-  // Check paywall — Plan 4 will wire this to a real DB lookup
-  const hasPurchase = false
+  // Check if user has a purchase (full access)
+  const { count: purchaseCount } = await supabase
+    .from('purchases')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+
+  const hasPurchase = (purchaseCount ?? 0) > 0
   if (!question.is_free && !hasPurchase) {
     return (
       <div className="space-y-4 max-w-lg mx-auto">
