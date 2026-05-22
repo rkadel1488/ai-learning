@@ -38,6 +38,24 @@ export type Database = {
         Update: { user_id?: string; stripe_session_id?: string; amount?: number; currency?: string; type?: PurchaseType }
         Relationships: []
       }
+      questions: {
+        Row: { id: string; topic_id: string; track: Track; type: QuestionType; order_index: number; prompt: string; options: string[]; correct_answer: string; explanation: string; created_at: string }
+        Insert: { topic_id: string; track: Track; type: QuestionType; order_index: number; prompt: string; options: string[]; correct_answer: string; explanation: string }
+        Update: { topic_id?: string; track?: Track; type?: QuestionType; order_index?: number; prompt?: string; options?: string[]; correct_answer?: string; explanation?: string }
+        Relationships: []
+      }
+      progress: {
+        Row: { id: string; child_id: string; topic_id: string; questions_answered: number; questions_correct: number; last_question_index: number; score_pct: number; completed_at: string | null; cert_earned_at: string | null; updated_at: string }
+        Insert: { child_id: string; topic_id: string; questions_answered?: number; questions_correct?: number; last_question_index?: number; score_pct?: number; completed_at?: string | null; cert_earned_at?: string | null; updated_at?: string }
+        Update: { questions_answered?: number; questions_correct?: number; last_question_index?: number; score_pct?: number; completed_at?: string | null; cert_earned_at?: string | null; updated_at?: string }
+        Relationships: []
+      }
+      answer_log: {
+        Row: { id: string; child_id: string; question_id: string; answer_given: string; is_correct: boolean; time_taken_ms: number; answered_at: string }
+        Insert: { child_id: string; question_id: string; answer_given: string; is_correct: boolean; time_taken_ms: number }
+        Update: Record<string, never>
+        Relationships: []
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
