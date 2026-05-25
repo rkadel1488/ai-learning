@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
+import { GoogleButton } from './GoogleButton'
 import type { UserRole } from '@/lib/supabase/types'
 
 export function SignUpForm() {
@@ -49,7 +50,16 @@ export function SignUpForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+    <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
+      <GoogleButton label="Sign up with Google" />
+
+      <div className="flex items-center gap-3">
+        <div className="flex-1 h-px bg-slate-700" />
+        <span className="text-xs text-slate-500">or sign up with email</span>
+        <div className="flex-1 h-px bg-slate-700" />
+      </div>
+
+    <form onSubmit={handleSubmit} className="space-y-4">
       {/* Role toggle */}
       <div className="flex rounded-lg overflow-hidden border border-slate-700">
         {(['parent', 'teacher'] as UserRole[]).map((r) => (
@@ -114,5 +124,6 @@ export function SignUpForm() {
         <a href="/login" className="text-violet-400 hover:underline">Log in</a>
       </p>
     </form>
+    </div>
   )
 }
