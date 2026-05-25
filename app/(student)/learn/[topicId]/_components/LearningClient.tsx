@@ -5,11 +5,14 @@ import { recordAnswer } from '@/lib/actions/learning'
 import { StoryQuestion } from './StoryQuestion'
 import { LevelsQuestion } from './LevelsQuestion'
 import { SandboxQuestion } from './SandboxQuestion'
+import { ConceptHint } from './ConceptHint'
 import type { Track } from '@/lib/supabase/types'
 
 type Props = {
   childId: string
   topicId: string
+  topicTitle: string
+  topicIcon: string
   questionId: string
   questionOrderIndex: number
   track: Track
@@ -22,7 +25,7 @@ type Props = {
 }
 
 export function LearningClient({
-  childId, topicId, questionId, questionOrderIndex,
+  childId, topicId, topicTitle, topicIcon, questionId, questionOrderIndex,
   track, prompt, options, correctAnswer, explanation,
   questionNumber, scorePct,
 }: Props) {
@@ -46,7 +49,13 @@ export function LearningClient({
 
   const sharedProps = { prompt, options, correctAnswer, explanation, onAnswer: handleAnswer }
 
-  if (track === 'story') return <StoryQuestion {...sharedProps} />
-  if (track === 'levels') return <LevelsQuestion {...sharedProps} questionNumber={questionNumber} scorePct={scorePct} />
-  return <SandboxQuestion {...sharedProps} />
+  return (
+    <div className="space-y-3">
+      <ConceptHint topicTitle={topicTitle} topicIcon={topicIcon} />
+
+      {track === 'story' && <StoryQuestion {...sharedProps} />}
+      {track === 'levels' && <LevelsQuestion {...sharedProps} questionNumber={questionNumber} scorePct={scorePct} />}
+      {track === 'sandbox' && <SandboxQuestion {...sharedProps} />}
+    </div>
+  )
 }

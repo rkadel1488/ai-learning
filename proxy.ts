@@ -1,12 +1,17 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
+  // Skip auth when Supabase is not configured (e.g. local dev without .env.local)
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return supabaseResponse
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() { return request.cookies.getAll() },
@@ -28,7 +33,6 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/signup')
   const isStudentRoute = pathname.startsWith('/dashboard')
-  const isTeacherRoute = pathname.startsWith('/teacher')
 
   // Not logged in — redirect to login (except auth routes and public routes)
   if (!user && !isAuthRoute) {
@@ -47,7 +51,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/teacher/dashboard', request.url))
     }
 
-    // Check if parent has children yet
     const { data: children } = await supabase
       .from('children')
       .select('id')
@@ -74,5 +77,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/|demo).*)'],
 }

@@ -45,9 +45,15 @@ export type Database = {
         Relationships: []
       }
       progress: {
-        Row: { id: string; child_id: string; topic_id: string; questions_answered: number; questions_correct: number; last_question_index: number; score_pct: number; completed_at: string | null; cert_earned_at: string | null; updated_at: string }
-        Insert: { child_id: string; topic_id: string; questions_answered?: number; questions_correct?: number; last_question_index?: number; score_pct?: number; completed_at?: string | null; cert_earned_at?: string | null; updated_at?: string }
-        Update: { questions_answered?: number; questions_correct?: number; last_question_index?: number; score_pct?: number; completed_at?: string | null; cert_earned_at?: string | null; updated_at?: string }
+        Row: { id: string; child_id: string; topic_id: string; questions_answered: number; questions_correct: number; last_question_index: number; score_pct: number; completed_at: string | null; cert_earned_at: string | null; streak_days: number; updated_at: string }
+        Insert: { child_id: string; topic_id: string; questions_answered?: number; questions_correct?: number; last_question_index?: number; score_pct?: number; completed_at?: string | null; cert_earned_at?: string | null; streak_days?: number; updated_at?: string }
+        Update: { questions_answered?: number; questions_correct?: number; last_question_index?: number; score_pct?: number; completed_at?: string | null; cert_earned_at?: string | null; streak_days?: number; updated_at?: string }
+        Relationships: []
+      }
+      achievements: {
+        Row: { id: string; child_id: string; type: AchievementType; topic_id: string | null; earned_at: string; share_token: string }
+        Insert: { child_id: string; type: AchievementType; topic_id?: string | null }
+        Update: Record<string, never>
         Relationships: []
       }
       answer_log: {
