@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { isTopicUnlocked, getTopicStatus } from '@/lib/learning/progress'
 import { StatCard } from './_components/StatCard'
-import { TopicProgressTable } from './_components/TopicProgressTable'
+import { ModuleGrid } from './_components/ModuleGrid'
 import { RecentActivity } from './_components/RecentActivity'
 import { AchievementsSection } from './_components/AchievementsSection'
 
@@ -100,38 +100,75 @@ export default async function DashboardPage() {
     }
   })
 
-  // Find the next topic to continue
   const nextTopic = topicsWithProgress.find(t => t.status === 'in-progress') ??
                     topicsWithProgress.find(t => t.status === 'available')
 
+  const totalXp = totalCorrect * 10
+
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-slate-400 text-sm mt-1">
-            {child.name} · {trackLabel[child.track] ?? child.track}
-          </p>
+      {/* Hero */}
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-800 px-8 py-12">
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-8 right-52 w-48 h-48 bg-pink-600/10 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <p className="text-slate-400 text-sm mb-2">{trackLabel[child.track] ?? child.track}</p>
+            <h1 className="text-4xl font-bold mb-3">
+              <span className="text-white">Hi, </span>
+              <span className="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
+                {child.name}
+              </span>
+              <span className="text-white"> 👋</span>
+            </h1>
+            <p className="text-slate-300 text-lg mb-6 max-w-md">
+              {nextTopic?.status === 'in-progress'
+                ? `Continue your journey in ${nextTopic.title}`
+                : nextTopic
+                ? `Ready to start ${nextTopic.title}?`
+                : "You've completed all topics! Amazing work."}
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              {nextTopic && (
+                <Link
+                  href={`/learn/${nextTopic.id}`}
+                  className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+                >
+                  {nextTopic.status === 'in-progress' ? '▶ Continue Learning' : '▶ Start Learning'}
+                </Link>
+              )}
+              <Link
+                href="/topics"
+                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold px-6 py-3 rounded-xl border border-slate-700 transition-colors"
+              >
+                View All Topics
+              </Link>
+            </div>
+          </div>
+
+          <div className="shrink-0 flex flex-col items-center text-center bg-slate-800/60 border border-slate-700 rounded-2xl p-6 min-w-[140px] backdrop-blur-sm">
+            <div className="text-4xl font-bold text-amber-400">{totalXp.toLocaleString()}</div>
+            <div className="text-xs text-slate-400 mt-1">⚡ Total XP</div>
+            <div className="mt-4 text-2xl font-bold text-white">{topicsCompleted}<span className="text-slate-500 text-base font-normal">/{topics.length}</span></div>
+            <div className="text-xs text-slate-400">Topics Done</div>
+          </div>
         </div>
-        {nextTopic && (
-          <Link
-            href={`/learn/${nextTopic.id}`}
-            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-          >
-            {nextTopic.status === 'in-progress' ? '▶ Continue Learning' : '▶ Start Learning'}
-          </Link>
-        )}
       </div>
 
+      {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <StatCard icon="✅" label="Questions Answered" value={totalAnswered} />
-        <StatCard icon="🎯" label="Accuracy" value={totalAnswered > 0 ? `${overallAccuracy}%` : '—'} />
-        <StatCard icon="📚" label="Topics Completed" value={`${topicsCompleted} / ${topics.length}`} />
-        <StatCard icon="🔥" label="Best Streak" value={maxStreak > 0 ? `${maxStreak}d` : '—'} />
+        <StatCard icon="✅" label="Questions Answered" value={totalAnswered} accent="violet" />
+        <StatCard icon="🎯" label="Accuracy" value={totalAnswered > 0 ? `${overallAccuracy}%` : '—'} accent="blue" />
+        <StatCard icon="📚" label="Topics Completed" value={`${topicsCompleted} / ${topics.length}`} accent="emerald" />
+        <StatCard icon="🔥" label="Best Streak" value={maxStreak > 0 ? `${maxStreak}d` : '—'} accent="amber" />
       </div>
 
-      <TopicProgressTable topics={topicsWithProgress} />
+      {/* Module grid */}
+      <ModuleGrid topics={topicsWithProgress} />
 
+      {/* Activity & Achievements */}
       <div className="grid gap-6 md:grid-cols-2">
         <RecentActivity activity={activity} />
         <AchievementsSection achievements={achievements} />
