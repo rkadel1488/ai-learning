@@ -6,6 +6,7 @@ import { StatCard } from './_components/StatCard'
 import { ModuleGrid } from './_components/ModuleGrid'
 import { RecentActivity } from './_components/RecentActivity'
 import { AchievementsSection } from './_components/AchievementsSection'
+import { SubscriptionCard } from './_components/SubscriptionCard'
 
 const trackLabel: Record<string, string> = {
   story: 'Story Track · Ages 6–10',
@@ -28,7 +29,7 @@ export default async function DashboardPage() {
 
   if (!child) redirect('/onboarding')
 
-  const [topicsRes, progressRes, qCountRes, activityRes, achievementsRes] = await Promise.all([
+  const [topicsRes, progressRes, qCountRes, activityRes, achievementsRes, purchaseRes] = await Promise.all([
     supabase
       .from('topics')
       .select('id, order_index, title, icon, tier')
@@ -52,6 +53,13 @@ export default async function DashboardPage() {
       .select('id, type, topic_id, earned_at, topics(title, icon)')
       .eq('child_id', child.id)
       .order('earned_at', { ascending: false }),
+    supabase
+      .from('purchases')
+      .select('purchased_at')
+      .eq('user_id', user.id)
+      .order('purchased_at', { ascending: false })
+      .limit(1)
+      .single(),
   ])
 
   const topics = topicsRes.data ?? []
@@ -61,6 +69,7 @@ export default async function DashboardPage() {
   const activity = (activityRes.data ?? []) as any[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const achievements = (achievementsRes.data ?? []) as any[]
+  const purchase = purchaseRes.data ?? null
 
   const progressMap = new Map(progressRows.map(p => [p.topic_id, p]))
   const qCountMap = new Map<string, number>()
@@ -156,6 +165,9 @@ export default async function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Subscription */}
+      <SubscriptionCard purchase={purchase} />
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

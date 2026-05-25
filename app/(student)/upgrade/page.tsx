@@ -8,15 +8,19 @@ export default async function UpgradePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Redirect if already purchased
+  // Redirect if subscription is still active (purchased within 365 days)
   const { data: purchase } = await supabase
     .from('purchases')
-    .select('id')
+    .select('purchased_at')
     .eq('user_id', user.id)
+    .order('purchased_at', { ascending: false })
     .limit(1)
     .single()
 
-  if (purchase) redirect('/topics?unlocked=1')
+  const isActive = !!purchase && (
+    Date.now() - new Date(purchase.purchased_at).getTime() < 365 * 24 * 60 * 60 * 1000
+  )
+  if (isActive) redirect('/dashboard')
 
   const result = await getOrCreatePaymentRequest()
 
@@ -28,12 +32,15 @@ export default async function UpgradePage() {
     )
   }
 
+  const isRenewal = !!purchase && !isActive
+
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center px-4 py-12">
       <PaymentFlow
         referenceCode={result.data.reference_code}
         status={result.data.status}
         amount={result.data.amount}
+        isRenewal={isRenewal}
       />
     </div>
   )
