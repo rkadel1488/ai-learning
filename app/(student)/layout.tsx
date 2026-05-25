@@ -12,14 +12,24 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     const supabase = createClient()
-    supabase.from('users').select('name').single().then(({ data }) => {
-      if (data?.name) setInitials(data.name.charAt(0).toUpperCase())
-    })
-    // XP = total correct answers across all progress rows
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(supabase.from('progress') as any).select('questions_correct').then(({ data }: any) => {
-      if (data) setXp(data.reduce((s: number, r: any) => s + (r.questions_correct ?? 0) * 10, 0))
-    })
+    async function load() {
+      const [{ data: userData }, { data: { user } }] = await Promise.all([
+        supabase.from('users').select('name').single(),
+        supabase.auth.getUser(),
+      ])
+      if (userData?.name) setInitials(userData.name.charAt(0).toUpperCase())
+      if (!user) return
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: child } = await (supabase.from('children') as any)
+        .select('id').eq('parent_id', user.id).limit(1).single()
+      if (!child?.id) return
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: progressData } = await (supabase.from('progress') as any)
+        .select('questions_correct').eq('child_id', child.id)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (progressData) setXp(progressData.reduce((s: number, r: any) => s + (r.questions_correct ?? 0) * 10, 0))
+    }
+    load()
   }, [])
 
   async function handleLogout() {

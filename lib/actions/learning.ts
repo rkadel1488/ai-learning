@@ -19,34 +19,32 @@ export async function recordAnswer(params: {
 
   const isCorrect = params.answerGiven === params.correctAnswer
 
-  // Insert answer log
-  await supabase.from('answer_log').insert({
-    child_id: params.childId,
-    question_id: params.questionId,
-    answer_given: params.answerGiven,
-    is_correct: isCorrect,
-    time_taken_ms: params.timeTakenMs,
-  })
+  // Insert answer log + fetch progress + count questions all in parallel
+  const [, progressResult, countResult] = await Promise.all([
+    supabase.from('answer_log').insert({
+      child_id: params.childId,
+      question_id: params.questionId,
+      answer_given: params.answerGiven,
+      is_correct: isCorrect,
+      time_taken_ms: params.timeTakenMs,
+    }),
+    supabase
+      .from('progress')
+      .select('id, questions_answered, questions_correct')
+      .eq('child_id', params.childId)
+      .eq('topic_id', params.topicId)
+      .single(),
+    supabase
+      .from('questions')
+      .select('id', { count: 'exact', head: true })
+      .eq('topic_id', params.topicId),
+  ])
 
-  // Get existing progress
-  const { data: existing } = await supabase
-    .from('progress')
-    .select('id, questions_answered, questions_correct')
-    .eq('child_id', params.childId)
-    .eq('topic_id', params.topicId)
-    .single()
-
+  const existing = progressResult.data
   const newAnswered = (existing?.questions_answered ?? 0) + 1
   const newCorrect = (existing?.questions_correct ?? 0) + (isCorrect ? 1 : 0)
   const newScorePct = calcScorePct(newCorrect, newAnswered)
-
-  // Get total question count for completion check
-  const { count: totalQuestions } = await supabase
-    .from('questions')
-    .select('id', { count: 'exact', head: true })
-    .eq('topic_id', params.topicId)
-
-  const isTopicComplete = newAnswered >= (totalQuestions ?? 999)
+  const isTopicComplete = newAnswered >= (countResult.count ?? 999)
   const certEarned = isTopicComplete && newScorePct >= 80
 
   const updates = {

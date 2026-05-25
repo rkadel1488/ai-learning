@@ -8,7 +8,6 @@ export default async function TopicsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Get first child of this parent
   const { data: child } = await supabase
     .from('children')
     .select('id, name, track')
@@ -19,27 +18,26 @@ export default async function TopicsPage() {
 
   if (!child) redirect('/onboarding')
 
-  // Load all topics in order
-  const { data: topics } = await supabase
-    .from('topics')
-    .select('id, order_index, title, icon, tier')
-    .order('order_index', { ascending: true })
+  // All three queries run in parallel
+  const [topicsRes, progressRes, qCountRes] = await Promise.all([
+    supabase
+      .from('topics')
+      .select('id, order_index, title, icon, tier')
+      .order('order_index', { ascending: true }),
+    supabase
+      .from('progress')
+      .select('topic_id, questions_answered, questions_correct, completed_at')
+      .eq('child_id', child.id),
+    supabase
+      .from('questions')
+      .select('topic_id')
+      .eq('track', child.track),
+  ])
 
-  // Load child's progress for all topics
-  const { data: progressRows } = await supabase
-    .from('progress')
-    .select('topic_id, questions_answered, questions_correct, completed_at')
-    .eq('child_id', child.id)
-
-  // Load question counts per topic for this track
-  const { data: qCounts } = await supabase
-    .from('questions')
-    .select('topic_id')
-    .eq('track', child.track)
-
-  const progressMap = new Map(progressRows?.map(p => [p.topic_id, p]) ?? [])
+  const topics = topicsRes.data ?? []
+  const progressMap = new Map((progressRes.data ?? []).map(p => [p.topic_id, p]))
   const qCountMap = new Map<string, number>()
-  qCounts?.forEach(q => {
+  ;(qCountRes.data ?? []).forEach(q => {
     qCountMap.set(q.topic_id, (qCountMap.get(q.topic_id) ?? 0) + 1)
   })
 
@@ -51,8 +49,8 @@ export default async function TopicsPage() {
       </div>
 
       <div className="grid gap-3">
-        {(topics ?? []).map((topic, index) => {
-          const prev = index > 0 ? topics![index - 1] : null
+        {topics.map((topic, index) => {
+          const prev = index > 0 ? topics[index - 1] : null
           const prevProgress = prev ? progressMap.get(prev.id) : null
           const topicProgress = progressMap.get(topic.id)
           const totalQuestions = qCountMap.get(topic.id) ?? 0
