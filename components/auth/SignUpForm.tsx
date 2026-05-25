@@ -34,8 +34,17 @@ export function SignUpForm() {
 
     if (data.user) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase.from('users') as any).insert({ id: data.user.id, email, role, name })
+      const { error: insertError } = await (supabase.from('users') as any).insert({ id: data.user.id, email, role, name })
+      if (insertError) {
+        setError(insertError.message)
+        setLoading(false)
+        return
+      }
       router.push(role === 'teacher' ? '/teacher/dashboard' : '/dashboard')
+    } else {
+      // Email confirmation required — Supabase sent a verification email
+      setError('Check your email and click the confirmation link to complete signup.')
+      setLoading(false)
     }
   }
 
