@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { isTopicUnlocked, getTopicStatus } from '@/lib/learning/progress'
@@ -99,13 +100,27 @@ export default async function DashboardPage() {
     }
   })
 
+  // Find the next topic to continue
+  const nextTopic = topicsWithProgress.find(t => t.status === 'in-progress') ??
+                    topicsWithProgress.find(t => t.status === 'available')
+
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-        <p className="text-slate-400 text-sm mt-1">
-          {child.name} · {trackLabel[child.track] ?? child.track}
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <p className="text-slate-400 text-sm mt-1">
+            {child.name} · {trackLabel[child.track] ?? child.track}
+          </p>
+        </div>
+        {nextTopic && (
+          <Link
+            href={`/learn/${nextTopic.id}`}
+            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          >
+            {nextTopic.status === 'in-progress' ? '▶ Continue Learning' : '▶ Start Learning'}
+          </Link>
+        )}
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
