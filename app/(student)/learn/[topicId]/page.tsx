@@ -114,6 +114,8 @@ export default async function LearnPage({ params }: Props) {
         <LearningClient
           childId={child.id}
           topicId={topicId}
+          topicTitle={topic.title}
+          topicIcon={topic.icon}
           questionId={question.id}
           questionOrderIndex={question.order_index}
           track={child.track as Track}
