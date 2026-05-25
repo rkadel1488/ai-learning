@@ -1,10 +1,10 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
-  // Skip auth middleware if Supabase is not configured (e.g. local dev without .env.local)
+  // Skip auth when Supabase is not configured (e.g. local dev without .env.local)
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return supabaseResponse
   }
@@ -33,7 +33,6 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/signup')
   const isStudentRoute = pathname.startsWith('/dashboard')
-  const isTeacherRoute = pathname.startsWith('/teacher')
 
   // Not logged in — redirect to login (except auth routes and public routes)
   if (!user && !isAuthRoute) {
@@ -52,7 +51,6 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/teacher/dashboard', request.url))
     }
 
-    // Check if parent has children yet
     const { data: children } = await supabase
       .from('children')
       .select('id')
