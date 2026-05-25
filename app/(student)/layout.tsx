@@ -1,14 +1,22 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
 
   const navLinks = [
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/topics', label: 'Learning Path' },
   ]
+
+  async function handleLogout() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -17,7 +25,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           <span className="text-xl">🤖</span>
           <span className="font-bold text-white">AI Learning</span>
         </Link>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 flex-1">
           {navLinks.map(({ href, label }) => {
             const active = pathname === href || pathname.startsWith(href + '/')
             return (
@@ -35,6 +43,12 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
             )
           })}
         </div>
+        <button
+          onClick={handleLogout}
+          className="text-sm text-slate-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-slate-800/50 transition-colors"
+        >
+          Log out
+        </button>
       </nav>
       <main className="max-w-4xl mx-auto px-4 py-8">{children}</main>
     </div>
