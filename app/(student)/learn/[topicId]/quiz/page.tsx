@@ -39,15 +39,23 @@ export default async function QuizPage({ params }: Props) {
       .eq('track', child.track as Track),
     supabase
       .from('purchases')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', user.id),
+      .select('purchased_at')
+      .eq('user_id', user.id)
+      .order('purchased_at', { ascending: false })
+      .limit(1)
+      .single(),
   ])
 
   if (!topicRes.data) notFound()
   const topic = topicRes.data
   const progress = progressRes.data
   const totalQuestions = countRes.count ?? 55
-  const hasPurchase = (purchaseRes.count ?? 0) > 0
+
+  // Subscription is valid if purchased within the last 365 days
+  const purchase = purchaseRes.data
+  const hasPurchase = !!purchase && (
+    Date.now() - new Date(purchase.purchased_at).getTime() < 365 * 24 * 60 * 60 * 1000
+  )
 
   if (progress?.completed_at) redirect('/topics')
 

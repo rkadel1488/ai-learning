@@ -24,7 +24,7 @@ export function PaywallGate({ questionsAnswered }: Props) {
           <li>✅ AI Genius Certificate</li>
           <li>✅ Pay once, keep forever</li>
         </ul>
-        <Link href="/unlock">
+        <Link href="/upgrade">
           <Button className="w-full mt-2">Unlock Full Access →</Button>
         </Link>
       </div>

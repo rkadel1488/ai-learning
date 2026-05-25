@@ -2,7 +2,8 @@ export type UserRole = 'parent' | 'teacher'
 export type Track = 'story' | 'levels' | 'sandbox'
 export type Tier = 'foundation' | 'intermediate' | 'advanced'
 export type QuestionType = 'mcq' | 'drag_drop' | 'chat' | 'build' | 'story_choice'
-export type PurchaseType = 'family' | 'school'
+export type PurchaseType = 'family' | 'school' | 'esewa'
+export type PaymentStatus = 'pending' | 'uploaded' | 'approved' | 'rejected'
 export type AchievementType = 'badge' | 'topic_cert' | 'genius_cert'
 
 export type Database = {
@@ -33,9 +34,15 @@ export type Database = {
         Relationships: []
       }
       purchases: {
-        Row: { id: string; user_id: string; stripe_session_id: string; amount: number; currency: string; type: PurchaseType; purchased_at: string }
-        Insert: { user_id: string; stripe_session_id: string; amount: number; currency?: string; type: PurchaseType }
-        Update: { user_id?: string; stripe_session_id?: string; amount?: number; currency?: string; type?: PurchaseType }
+        Row: { id: string; user_id: string; stripe_session_id: string | null; amount: number; currency: string; type: PurchaseType; purchased_at: string }
+        Insert: { user_id: string; stripe_session_id?: string | null; amount: number; currency?: string; type: PurchaseType }
+        Update: { user_id?: string; stripe_session_id?: string | null; amount?: number; currency?: string; type?: PurchaseType }
+        Relationships: []
+      }
+      payment_requests: {
+        Row: { id: string; user_id: string; reference_code: string; amount: number; currency: string; status: PaymentStatus; analysis_notes: string | null; created_at: string; reviewed_at: string | null }
+        Insert: { user_id: string; reference_code: string; amount?: number; currency?: string; status?: PaymentStatus }
+        Update: { status?: PaymentStatus; analysis_notes?: string | null; reviewed_at?: string | null }
         Relationships: []
       }
       questions: {
