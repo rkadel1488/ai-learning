@@ -5,18 +5,18 @@ import { Button } from '@/components/ui/Button'
 import { ClassCreated } from './ClassCreated'
 
 type Step = 'form' | 'created'
-type AgeGroup = '6-10' | '11-14' | '15-18'
+type AgeGroup = '6-10' | '11-15' | '16-20'
 
 const AGE_GROUPS: { value: AgeGroup; label: string }[] = [
-  { value: '6-10', label: '🧒 Ages 6–10 (Story Adventure)' },
-  { value: '11-14', label: '🧑 Ages 11–14 (Game Levels)' },
-  { value: '15-18', label: '🧑‍💻 Ages 15–18 (Creative Sandbox)' },
+  { value: '6-10',  label: '🧒 Ages 6–10 (Story Adventure)' },
+  { value: '11-15', label: '🧑 Ages 11–15 (Game Levels)' },
+  { value: '16-20', label: '🧑‍💻 Ages 16–20 (Creative Sandbox)' },
 ]
 
 export function TeacherOnboarding() {
   const [step, setStep] = useState<Step>('form')
   const [className, setClassName] = useState('')
-  const [ageGroup, setAgeGroup] = useState<AgeGroup>('11-14')
+  const [ageGroup, setAgeGroup] = useState<AgeGroup>('11-15')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [joinCode, setJoinCode] = useState('')

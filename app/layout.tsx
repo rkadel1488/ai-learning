@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "AI Learning",
-  description: "Learn AI through play — interactive platform for students aged 6–18",
+  description: "Learn AI through play — interactive platform for students aged 6–20",
 };
 
 export default function RootLayout({

@@ -11,7 +11,7 @@ export function buildChildInsert(params: { parentId: string; name: string; age: 
   }
 }
 
-export function buildClassInsert(params: { teacherId: string; name: string; ageGroup: '6-10' | '11-14' | '15-18' }) {
+export function buildClassInsert(params: { teacherId: string; name: string; ageGroup: '6-10' | '11-15' | '16-20' }) {
   return {
     teacher_id: params.teacherId,
     name: params.name,

@@ -14,8 +14,8 @@ export async function createChild(formData: FormData) {
   const name = formData.get('name') as string
   const age = parseInt(formData.get('age') as string, 10)
 
-  if (!name || isNaN(age) || age < 6 || age > 18) {
-    return { error: 'Please enter a valid name and age (6–18).' }
+  if (!name || isNaN(age) || age < 6 || age > 20) {
+    return { error: 'Please enter a valid name and age (6–20).' }
   }
 
   const insert = buildChildInsert({ parentId: user.id, name, age })
@@ -31,7 +31,7 @@ export async function createClass(formData: FormData) {
   if (!user) redirect('/login')
 
   const name = formData.get('name') as string
-  const ageGroup = formData.get('ageGroup') as '6-10' | '11-14' | '15-18'
+  const ageGroup = formData.get('ageGroup') as '6-10' | '11-15' | '16-20'
 
   if (!name || !ageGroup) {
     return { error: 'Please enter a class name and age group.' }

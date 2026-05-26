@@ -10,8 +10,8 @@ import { SubscriptionCard } from './_components/SubscriptionCard'
 
 const trackLabel: Record<string, string> = {
   story: 'Story Track · Ages 6–10',
-  levels: 'Levels Track · Ages 11–14',
-  sandbox: 'Sandbox Track · Ages 15–18',
+  levels: 'Levels Track · Ages 11–15',
+  sandbox: 'Sandbox Track · Ages 16–20',
 }
 
 export default async function DashboardPage() {

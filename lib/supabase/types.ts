@@ -30,9 +30,9 @@ export type Database = {
         Relationships: []
       }
       classes: {
-        Row: { id: string; teacher_id: string; name: string; age_group: '6-10' | '11-14' | '15-18'; join_code: string; created_at: string }
-        Insert: { teacher_id: string; name: string; age_group: '6-10' | '11-14' | '15-18'; join_code: string }
-        Update: { name?: string; age_group?: '6-10' | '11-14' | '15-18' }
+        Row: { id: string; teacher_id: string; name: string; age_group: '6-10' | '11-15' | '16-20'; join_code: string; created_at: string }
+        Insert: { teacher_id: string; name: string; age_group: '6-10' | '11-15' | '16-20'; join_code: string }
+        Update: { name?: string; age_group?: '6-10' | '11-15' | '16-20' }
         Relationships: []
       }
       purchases: {

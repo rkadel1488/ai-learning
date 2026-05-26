@@ -77,11 +77,11 @@ export function ParentOnboarding() {
             onChange={(e) => setAge(e.target.value)}
             required
             min={6}
-            max={18}
+            max={20}
             className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-violet-500"
-            placeholder="6 – 18"
+            placeholder="6 – 20"
           />
-          <p className="text-xs text-slate-500 mt-1">Ages 6–10 get Story mode · 11–14 get Game Levels · 15–18 get Sandbox</p>
+          <p className="text-xs text-slate-500 mt-1">Ages 6–10 get Story mode · 11–15 get Game Levels · 16–20 get Sandbox</p>
         </div>
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
