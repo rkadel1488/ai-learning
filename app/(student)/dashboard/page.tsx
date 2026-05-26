@@ -117,60 +117,64 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Hero */}
-      <div className="relative overflow-hidden rounded-3xl bg-slate-900 border border-slate-800 px-8 py-12">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-8 right-52 w-48 h-48 bg-pink-600/10 rounded-full blur-2xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 px-6 sm:px-10 py-10 sm:py-12" style={{ background: 'linear-gradient(135deg, #0f1629 0%, #0a0f1e 50%, #0d0a1a 100%)' }}>
+        {/* Blobs */}
+        <div className="absolute -top-20 -left-20 w-80 h-80 bg-violet-600/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-10 right-40 w-40 h-40 bg-fuchsia-600/8 rounded-full blur-2xl pointer-events-none" />
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px)', backgroundSize: '40px 40px' }} />
 
-        <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <p className="text-slate-400 text-sm mb-2">{trackLabel[child.track] ?? child.track}</p>
-            <h1 className="text-4xl font-bold mb-3">
-              <span className="text-white">Hi, </span>
-              <span className="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
-                {child.name}
-              </span>
-              <span className="text-white"> 👋</span>
+        <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-2 bg-violet-500/10 border border-violet-500/20 rounded-full px-3 py-1 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+              <span className="text-violet-300 text-xs font-semibold">{trackLabel[child.track] ?? child.track}</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-black mb-3 leading-tight">
+              <span className="text-slate-300">Hi, </span>
+              <span className="bg-gradient-to-r from-violet-300 via-blue-300 to-cyan-300 bg-clip-text text-transparent">{child.name}</span>
+              <span className="ml-2">👋</span>
             </h1>
-            <p className="text-slate-300 text-lg mb-6 max-w-md">
+            <p className="text-slate-400 text-base mb-7 max-w-sm leading-relaxed">
               {nextTopic?.status === 'in-progress'
-                ? `Continue your journey in ${nextTopic.title}`
+                ? `Pick up where you left off in ${nextTopic.title}`
                 : nextTopic
-                ? `Ready to start ${nextTopic.title}?`
-                : "You've completed all topics! Amazing work."}
+                ? `Ready to dive into ${nextTopic.title}?`
+                : "You've completed all topics! Outstanding work 🎉"}
             </p>
             <div className="flex flex-wrap items-center gap-3">
               {nextTopic && (
                 <Link
                   href={`/learn/${nextTopic.id}`}
-                  className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+                  className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30 hover:-translate-y-0.5"
                 >
-                  {nextTopic.status === 'in-progress' ? '▶ Continue Learning' : '▶ Start Learning'}
+                  {nextTopic.status === 'in-progress' ? '▶ Continue' : '▶ Start Learning'}
                 </Link>
               )}
               <Link
                 href="/topics"
-                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold px-6 py-3 rounded-xl border border-slate-700 transition-colors"
+                className="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white font-semibold px-5 py-3 rounded-xl border border-slate-700/80 hover:border-slate-600 transition-all"
               >
-                View All Topics
+                All Topics
               </Link>
             </div>
           </div>
 
-          <div className="shrink-0 flex flex-col gap-3">
-            <div className="flex flex-col items-center text-center bg-slate-800/60 border border-slate-700 rounded-2xl p-5 min-w-[130px] backdrop-blur-sm">
-              <div className="text-3xl font-bold text-amber-400">{totalXp.toLocaleString()}</div>
-              <div className="text-xs text-slate-400 mt-1">⚡ Total XP</div>
-              <div className="mt-3 text-xl font-bold text-white">{topicsCompleted}<span className="text-slate-500 text-sm font-normal">/{topics.length}</span></div>
-              <div className="text-xs text-slate-400">Topics Done</div>
+          <div className="shrink-0 flex flex-row md:flex-col gap-3">
+            <div className="flex flex-col items-center text-center bg-slate-900/60 border border-slate-700/50 rounded-2xl p-5 min-w-[120px] backdrop-blur-sm">
+              <div className="text-3xl font-black text-amber-300 tabular-nums">{totalXp.toLocaleString()}</div>
+              <div className="text-[11px] text-slate-500 mt-1 font-medium">⚡ Total XP</div>
+              <div className="mt-3 text-2xl font-black text-white tabular-nums">{topicsCompleted}<span className="text-slate-600 text-sm font-normal">/{topics.length}</span></div>
+              <div className="text-[11px] text-slate-500 font-medium">Topics Done</div>
             </div>
             <Link
               href="/friends"
-              className="flex flex-col items-center text-center bg-amber-500/10 border border-amber-500/30 hover:border-amber-500/60 rounded-2xl p-4 min-w-[130px] backdrop-blur-sm transition-colors group"
+              className="flex flex-col items-center text-center bg-amber-500/8 border border-amber-500/25 hover:border-amber-400/50 hover:bg-amber-500/12 rounded-2xl p-4 min-w-[120px] backdrop-blur-sm transition-all group"
             >
-              <div className="text-3xl font-bold text-amber-400">{child.trophies}</div>
-              <div className="text-xs text-slate-400 mt-1">🏆 Trophies</div>
-              <div className="text-xs text-amber-500 group-hover:text-amber-400 mt-2 font-medium transition-colors">Friends →</div>
+              <div className="text-3xl font-black text-amber-300 tabular-nums">{child.trophies}</div>
+              <div className="text-[11px] text-slate-500 mt-1 font-medium">🏆 Trophies</div>
+              <div className="text-[11px] text-amber-500/70 group-hover:text-amber-400 mt-2 font-semibold transition-colors">Friends →</div>
             </Link>
           </div>
         </div>

@@ -13,82 +13,114 @@ type TopicRow = {
   certEarned: boolean
 }
 
-const tierGradients: Record<string, string> = {
-  foundation: 'from-emerald-500/20 to-teal-500/20',
-  intermediate: 'from-blue-500/20 to-cyan-500/20',
-  advanced: 'from-violet-500/20 to-purple-500/20',
+const tierConfig: Record<string, { bar: string; badge: string; border: string; glow: string; topGlow: string }> = {
+  foundation: {
+    bar: 'bg-gradient-to-r from-emerald-500 to-teal-400',
+    badge: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25',
+    border: 'hover:border-emerald-800',
+    glow: 'hover:shadow-emerald-500/8',
+    topGlow: 'from-emerald-500/8',
+  },
+  intermediate: {
+    bar: 'bg-gradient-to-r from-blue-500 to-cyan-400',
+    badge: 'bg-blue-500/15 text-blue-400 border-blue-500/25',
+    border: 'hover:border-blue-800',
+    glow: 'hover:shadow-blue-500/8',
+    topGlow: 'from-blue-500/8',
+  },
+  advanced: {
+    bar: 'bg-gradient-to-r from-violet-500 to-purple-400',
+    badge: 'bg-violet-500/15 text-violet-400 border-violet-500/25',
+    border: 'hover:border-violet-800',
+    glow: 'hover:shadow-violet-500/8',
+    topGlow: 'from-violet-500/8',
+  },
 }
-
-const tierBadge: Record<string, string> = {
-  foundation: 'bg-emerald-400/10 text-emerald-400',
-  intermediate: 'bg-blue-400/10 text-blue-400',
-  advanced: 'bg-violet-400/10 text-violet-400',
-}
+const fallbackCfg = tierConfig.foundation
 
 export function ModuleGrid({ topics }: { topics: TopicRow[] }) {
   return (
     <div>
-      <h2 className="text-xl font-bold text-white mb-4">Learning Modules</h2>
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-xl font-black text-white tracking-tight">Learning Modules</h2>
+        <div className="hidden sm:flex items-center gap-3 text-[11px] text-slate-500 font-medium">
+          <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500" />Foundation</span>
+          <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500" />Intermediate</span>
+          <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-violet-500" />Advanced</span>
+        </div>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {topics.map(topic => (
-          <ModuleCard key={topic.id} topic={topic} />
-        ))}
+        {topics.map(topic => <ModuleCard key={topic.id} topic={topic} />)}
       </div>
     </div>
   )
 }
 
 function ModuleCard({ topic }: { topic: TopicRow }) {
-  const gradient = tierGradients[topic.tier] ?? 'from-slate-500/20 to-slate-600/20'
-  const badge = tierBadge[topic.tier] ?? 'bg-slate-400/10 text-slate-400'
+  const cfg = tierConfig[topic.tier] ?? fallbackCfg
   const isLocked = topic.status === 'locked'
   const isComplete = topic.status === 'complete'
   const isInProgress = topic.status === 'in-progress'
 
   const card = (
-    <div className={`relative bg-slate-900 border rounded-2xl p-5 transition-all duration-200 h-full ${
+    <div className={`relative bg-slate-900 border rounded-2xl p-5 transition-all duration-200 h-full overflow-hidden ${
       isLocked
-        ? 'border-slate-800 opacity-50'
-        : 'border-slate-700 hover:border-slate-600 hover:bg-slate-800/50 cursor-pointer'
+        ? 'border-slate-800/50 opacity-40 select-none'
+        : `border-slate-800 ${cfg.border} ${cfg.glow} hover:shadow-xl hover:bg-slate-900/90 cursor-pointer group`
     }`}>
-      <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${gradient} opacity-30 pointer-events-none`} />
+      {/* Top gradient wash */}
+      {!isLocked && (
+        <div className={`absolute top-0 left-0 right-0 h-20 bg-gradient-to-b ${cfg.topGlow} to-transparent pointer-events-none`} />
+      )}
+
       <div className="relative flex flex-col h-full">
-        <div className="flex items-start justify-between mb-4">
-          <div className="text-4xl">{topic.icon}</div>
+        {/* Header */}
+        <div className="flex items-start justify-between mb-3">
+          <div className="text-4xl leading-none drop-shadow-sm">{topic.icon}</div>
           <div className="flex items-center gap-1.5">
-            {topic.certEarned && <span title="Certificate earned">🏆</span>}
-            {isLocked ? (
-              <span className="text-slate-500 text-xl">🔒</span>
-            ) : isComplete ? (
-              <span className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm font-bold">✓</span>
-            ) : null}
+            {topic.certEarned && (
+              <span title="Certificate earned" className="text-base">🏆</span>
+            )}
+            {isLocked && <span className="text-slate-600 text-base">🔒</span>}
+            {isComplete && (
+              <span className="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-[10px] text-emerald-400 font-black">✓</span>
+            )}
+            {isInProgress && (
+              <span className="relative flex h-2 w-2 mt-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-60" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500" />
+              </span>
+            )}
           </div>
         </div>
 
-        <h3 className="font-semibold text-white mb-2">{topic.title}</h3>
-        <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full capitalize self-start ${badge}`}>
+        <h3 className="font-bold text-white text-sm leading-snug mb-2">{topic.title}</h3>
+        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize self-start border ${cfg.badge}`}>
           {topic.tier}
         </span>
 
-        <div className="mt-auto pt-4">
-          <div className="flex justify-between text-xs text-slate-400 mb-1.5">
-            <span>{topic.questionsAnswered} / {topic.totalQuestions} questions</span>
-            {topic.scorePct !== null && <span className="font-medium">{topic.scorePct}%</span>}
+        {/* Progress */}
+        <div className="mt-auto pt-4 space-y-1.5">
+          <div className="flex justify-between text-xs">
+            <span className="text-slate-500">{topic.questionsAnswered}/{topic.totalQuestions}</span>
+            {topic.scorePct !== null && (
+              <span className="text-slate-300 font-bold">{topic.scorePct}%</span>
+            )}
           </div>
           <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                isComplete ? 'bg-emerald-500' : 'bg-violet-500'
-              }`}
+              className={`h-full rounded-full transition-all duration-700 ${isComplete ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : cfg.bar}`}
               style={{ width: `${topic.progressPct}%` }}
             />
           </div>
-          {isInProgress && (
-            <div className="mt-2.5 text-xs font-medium text-violet-400">▶ Continue</div>
-          )}
-          {topic.status === 'available' && (
-            <div className="mt-2.5 text-xs font-medium text-slate-400">→ Start Topic</div>
-          )}
+          <p className={`text-xs font-semibold transition-colors ${
+            isInProgress ? 'text-violet-400 group-hover:text-violet-300' :
+            isComplete ? 'text-emerald-400' :
+            isLocked ? 'text-slate-600' :
+            'text-slate-500 group-hover:text-slate-300'
+          }`}>
+            {isInProgress ? '▶ Continue' : isComplete ? '✓ Complete' : isLocked ? '🔒 Locked' : '→ Start'}
+          </p>
         </div>
       </div>
     </div>

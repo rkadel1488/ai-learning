@@ -90,35 +90,40 @@ export function SubscriptionCard({ purchase }: Props) {
 
 function UpgradeBanner() {
   return (
-    <div className="relative overflow-hidden bg-gradient-to-br from-violet-900/30 to-slate-900 border border-violet-700/40 rounded-2xl p-5">
-      <div className="absolute -top-12 -right-12 w-40 h-40 bg-violet-600/10 rounded-full blur-2xl pointer-events-none" />
-      <div className="relative flex flex-col sm:flex-row sm:items-center gap-5">
-        <div className="flex-1 space-y-3">
+    <div className="relative overflow-hidden rounded-2xl border border-violet-500/25 p-5 sm:p-6" style={{ background: 'linear-gradient(135deg, #1a0a2e 0%, #0f0a1a 60%, #0a1020 100%)' }}>
+      <div className="absolute -top-16 -right-16 w-48 h-48 bg-violet-600/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative flex flex-col sm:flex-row sm:items-center gap-6">
+        <div className="flex-1 space-y-4">
           <div>
-            <p className="text-violet-400 text-xs font-semibold uppercase tracking-widest mb-1">Unlock Full Access</p>
-            <p className="text-white font-bold text-lg leading-snug">Get 1 full year of AI learning for Rs 1,000</p>
+            <span className="inline-flex items-center gap-1.5 bg-violet-500/15 border border-violet-500/25 text-violet-300 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2">
+              🚀 Unlock Full Access
+            </span>
+            <p className="text-white font-black text-xl leading-snug">1 year of AI learning<br/>
+              <span className="bg-gradient-to-r from-violet-300 to-blue-300 bg-clip-text text-transparent">for just Rs 1,000</span>
+            </p>
           </div>
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-slate-300">
-            <li className="flex items-center gap-1.5"><span className="text-emerald-400">✓</span> 500+ quiz questions</li>
-            <li className="flex items-center gap-1.5"><span className="text-emerald-400">✓</span> Interactive lessons</li>
-            <li className="flex items-center gap-1.5"><span className="text-emerald-400">✓</span> Topic certificates</li>
-            <li className="flex items-center gap-1.5"><span className="text-emerald-400">✓</span> AI Genius certificate</li>
-            <li className="flex items-center gap-1.5"><span className="text-emerald-400">✓</span> All 10 topics</li>
-            <li className="flex items-center gap-1.5"><span className="text-emerald-400">✓</span> Progress tracking</li>
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs text-slate-400">
+            {['500+ quiz questions', 'Interactive games', 'Topic certificates', 'AI Genius certificate', 'All 10 topics', 'Progress tracking'].map(f => (
+              <li key={f} className="flex items-center gap-1.5">
+                <span className="text-emerald-400 font-bold">✓</span>
+                {f}
+              </li>
+            ))}
           </ul>
         </div>
         <div className="flex flex-col items-center gap-3 shrink-0">
           <div className="text-center">
-            <p className="text-white font-bold text-2xl">Rs 1,000</p>
-            <p className="text-slate-400 text-xs">per year</p>
+            <p className="text-white font-black text-3xl">Rs 1,000</p>
+            <p className="text-slate-500 text-xs font-medium">per year · via eSewa</p>
           </div>
           <Link
             href="/upgrade"
-            className="bg-violet-600 hover:bg-violet-500 text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
+            className="bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white font-black px-7 py-3 rounded-xl transition-all shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:-translate-y-0.5 text-sm whitespace-nowrap"
           >
             Subscribe Now →
           </Link>
-          <p className="text-slate-500 text-[10px] text-center">Pay via eSewa · Instant activation</p>
         </div>
       </div>
     </div>
