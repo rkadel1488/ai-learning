@@ -5,6 +5,8 @@ export type QuestionType = 'mcq' | 'drag_drop' | 'chat' | 'build' | 'story_choic
 export type PurchaseType = 'family' | 'school' | 'esewa'
 export type PaymentStatus = 'pending' | 'uploaded' | 'approved' | 'rejected'
 export type AchievementType = 'badge' | 'topic_cert' | 'genius_cert'
+export type FriendshipStatus = 'pending' | 'accepted' | 'rejected'
+export type ChallengeStatus = 'pending' | 'active' | 'completed' | 'declined'
 
 export type Database = {
   public: {
@@ -16,9 +18,9 @@ export type Database = {
         Relationships: []
       }
       children: {
-        Row: { id: string; parent_id: string; name: string; age: number; track: Track; created_at: string }
-        Insert: { parent_id: string; name: string; age: number; track: Track }
-        Update: { name?: string; age?: number; track?: Track }
+        Row: { id: string; parent_id: string; name: string; age: number; track: Track; trophies: number; created_at: string }
+        Insert: { parent_id: string; name: string; age: number; track: Track; trophies?: number }
+        Update: { name?: string; age?: number; track?: Track; trophies?: number }
         Relationships: []
       }
       topics: {
@@ -67,6 +69,18 @@ export type Database = {
         Row: { id: string; child_id: string; question_id: string; answer_given: string; is_correct: boolean; time_taken_ms: number; answered_at: string }
         Insert: { child_id: string; question_id: string; answer_given: string; is_correct: boolean; time_taken_ms: number }
         Update: Record<string, never>
+        Relationships: []
+      }
+      friendships: {
+        Row: { id: string; requester_id: string; addressee_id: string; status: FriendshipStatus; created_at: string }
+        Insert: { requester_id: string; addressee_id: string; status?: FriendshipStatus }
+        Update: { status?: FriendshipStatus }
+        Relationships: []
+      }
+      challenges: {
+        Row: { id: string; challenger_id: string; challenged_id: string; topic_id: string; status: ChallengeStatus; trophy_bet: number; challenger_score: number | null; challenged_score: number | null; winner_id: string | null; deadline: string | null; created_at: string; completed_at: string | null }
+        Insert: { challenger_id: string; challenged_id: string; topic_id: string; status?: ChallengeStatus; trophy_bet?: number }
+        Update: { status?: ChallengeStatus; challenger_score?: number | null; challenged_score?: number | null; winner_id?: string | null; deadline?: string | null; completed_at?: string | null }
         Relationships: []
       }
     }

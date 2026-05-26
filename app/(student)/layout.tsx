@@ -9,6 +9,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const router = useRouter()
   const [initials, setInitials] = useState('')
   const [xp, setXp] = useState(0)
+  const [trophies, setTrophies] = useState<number | null>(null)
 
   useEffect(() => {
     const supabase = createClient()
@@ -21,8 +22,9 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
       if (!user) return
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: child } = await (supabase.from('children') as any)
-        .select('id').eq('parent_id', user.id).limit(1).single()
+        .select('id, trophies').eq('parent_id', user.id).limit(1).single()
       if (!child?.id) return
+      if (child.trophies !== undefined) setTrophies(child.trophies)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: progressData } = await (supabase.from('progress') as any)
         .select('questions_correct').eq('child_id', child.id)
@@ -41,6 +43,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const navLinks = [
     { href: '/dashboard', label: 'Home' },
     { href: '/topics', label: 'Learn' },
+    { href: '/friends', label: 'Friends' },
   ]
 
   return (
@@ -74,6 +77,12 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
               <span className="text-amber-400 text-xs">⚡</span>
               <span className="text-amber-400 text-xs font-semibold">{xp.toLocaleString()} XP</span>
             </div>
+          )}
+          {trophies !== null && (
+            <Link href="/friends" className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 hover:border-amber-500/40 px-3 py-1.5 rounded-full transition-colors">
+              <span className="text-amber-400 text-xs">🏆</span>
+              <span className="text-amber-400 text-xs font-semibold">{trophies}</span>
+            </Link>
           )}
           <button
             onClick={handleLogout}

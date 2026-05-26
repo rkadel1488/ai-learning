@@ -21,7 +21,7 @@ export default async function DashboardPage() {
 
   const { data: child } = await supabase
     .from('children')
-    .select('id, name, age, track, created_at')
+    .select('id, name, age, track, trophies, created_at')
     .eq('parent_id', user.id)
     .order('created_at', { ascending: true })
     .limit(1)
@@ -157,11 +157,21 @@ export default async function DashboardPage() {
             </div>
           </div>
 
-          <div className="shrink-0 flex flex-col items-center text-center bg-slate-800/60 border border-slate-700 rounded-2xl p-6 min-w-[140px] backdrop-blur-sm">
-            <div className="text-4xl font-bold text-amber-400">{totalXp.toLocaleString()}</div>
-            <div className="text-xs text-slate-400 mt-1">⚡ Total XP</div>
-            <div className="mt-4 text-2xl font-bold text-white">{topicsCompleted}<span className="text-slate-500 text-base font-normal">/{topics.length}</span></div>
-            <div className="text-xs text-slate-400">Topics Done</div>
+          <div className="shrink-0 flex flex-col gap-3">
+            <div className="flex flex-col items-center text-center bg-slate-800/60 border border-slate-700 rounded-2xl p-5 min-w-[130px] backdrop-blur-sm">
+              <div className="text-3xl font-bold text-amber-400">{totalXp.toLocaleString()}</div>
+              <div className="text-xs text-slate-400 mt-1">⚡ Total XP</div>
+              <div className="mt-3 text-xl font-bold text-white">{topicsCompleted}<span className="text-slate-500 text-sm font-normal">/{topics.length}</span></div>
+              <div className="text-xs text-slate-400">Topics Done</div>
+            </div>
+            <Link
+              href="/friends"
+              className="flex flex-col items-center text-center bg-amber-500/10 border border-amber-500/30 hover:border-amber-500/60 rounded-2xl p-4 min-w-[130px] backdrop-blur-sm transition-colors group"
+            >
+              <div className="text-3xl font-bold text-amber-400">{child.trophies}</div>
+              <div className="text-xs text-slate-400 mt-1">🏆 Trophies</div>
+              <div className="text-xs text-amber-500 group-hover:text-amber-400 mt-2 font-medium transition-colors">Friends →</div>
+            </Link>
           </div>
         </div>
       </div>
