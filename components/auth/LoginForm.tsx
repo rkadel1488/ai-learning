@@ -5,12 +5,19 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
 import { GoogleButton } from './GoogleButton'
 
-export function LoginForm() {
+const OAUTH_ERROR_MESSAGES: Record<string, string> = {
+  missing_code: 'Google sign-in was cancelled before completing. Please try again.',
+  auth_failed: 'We could not finish signing you in with Google. Please try again, or use email and password below.',
+}
+
+export function LoginForm({ oauthError, oauthReason }: { oauthError?: string; oauthReason?: string }) {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(
+    oauthError ? (OAUTH_ERROR_MESSAGES[oauthError] ?? 'Sign-in failed. Please try again.') : null
+  )
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -66,7 +73,12 @@ export function LoginForm() {
           />
         </div>
 
-        {error && <p className="text-red-400 text-sm">{error}</p>}
+        {error && (
+          <p className="text-red-400 text-sm">
+            {error}
+            {oauthReason && <span className="block text-xs text-red-400/60 mt-0.5">({oauthReason})</span>}
+          </p>
+        )}
 
         <Button type="submit" loading={loading} className="w-full">
           Log in

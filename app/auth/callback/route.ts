@@ -30,7 +30,9 @@ export async function GET(request: NextRequest) {
   const { data, error } = await supabase.auth.exchangeCodeForSession(code)
 
   if (error || !data.user) {
-    return NextResponse.redirect(`${origin}/login?error=auth_failed`)
+    console.error('OAuth code exchange failed:', error?.code ?? error?.name, error?.message)
+    const reason = error?.code ?? 'auth_failed'
+    return NextResponse.redirect(`${origin}/login?error=auth_failed&reason=${encodeURIComponent(reason)}`)
   }
 
   // Create public.users row if it doesn't exist yet (first Google login)
