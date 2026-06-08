@@ -3,21 +3,13 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
-import { GoogleButton } from './GoogleButton'
 
-const OAUTH_ERROR_MESSAGES: Record<string, string> = {
-  missing_code: 'Google sign-in was cancelled before completing. Please try again.',
-  auth_failed: 'We could not finish signing you in with Google. Please try again, or use email and password below.',
-}
-
-export function LoginForm({ oauthError, oauthReason }: { oauthError?: string; oauthReason?: string }) {
+export function LoginForm() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(
-    oauthError ? (OAUTH_ERROR_MESSAGES[oauthError] ?? 'Sign-in failed. Please try again.') : null
-  )
+  const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -42,14 +34,6 @@ export function LoginForm({ oauthError, oauthReason }: { oauthError?: string; oa
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-      <GoogleButton label="Continue with Google" />
-
-      <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-slate-700" />
-        <span className="text-xs text-slate-500">or</span>
-        <div className="flex-1 h-px bg-slate-700" />
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm text-slate-400 mb-1">Email</label>
@@ -73,12 +57,7 @@ export function LoginForm({ oauthError, oauthReason }: { oauthError?: string; oa
           />
         </div>
 
-        {error && (
-          <p className="text-red-400 text-sm">
-            {error}
-            {oauthReason && <span className="block text-xs text-red-400/60 mt-0.5">({oauthReason})</span>}
-          </p>
-        )}
+        {error && <p className="text-red-400 text-sm">{error}</p>}
 
         <Button type="submit" loading={loading} className="w-full">
           Log in

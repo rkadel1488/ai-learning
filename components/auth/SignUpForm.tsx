@@ -3,24 +3,16 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
-import { GoogleButton } from './GoogleButton'
 import type { UserRole } from '@/lib/supabase/types'
 
-const OAUTH_ERROR_MESSAGES: Record<string, string> = {
-  missing_code: 'Google sign-in was cancelled before completing. Please try again.',
-  auth_failed: 'We could not finish signing you up with Google. Please try again, or use email and password below.',
-}
-
-export function SignUpForm({ oauthError, oauthReason }: { oauthError?: string; oauthReason?: string }) {
+export function SignUpForm() {
   const router = useRouter()
   const [role, setRole] = useState<UserRole>('parent')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(
-    oauthError ? (OAUTH_ERROR_MESSAGES[oauthError] ?? 'Sign-in failed. Please try again.') : null
-  )
+  const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -58,14 +50,6 @@ export function SignUpForm({ oauthError, oauthReason }: { oauthError?: string; o
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4">
-      <GoogleButton label="Sign up with Google" />
-
-      <div className="flex items-center gap-3">
-        <div className="flex-1 h-px bg-slate-700" />
-        <span className="text-xs text-slate-500">or sign up with email</span>
-        <div className="flex-1 h-px bg-slate-700" />
-      </div>
-
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Role toggle */}
       <div className="flex rounded-lg overflow-hidden border border-slate-700">
@@ -120,12 +104,7 @@ export function SignUpForm({ oauthError, oauthReason }: { oauthError?: string; o
         />
       </div>
 
-      {error && (
-        <p className="text-red-400 text-sm">
-          {error}
-          {oauthReason && <span className="block text-xs text-red-400/60 mt-0.5">({oauthReason})</span>}
-        </p>
-      )}
+      {error && <p className="text-red-400 text-sm">{error}</p>}
 
       <Button type="submit" loading={loading} className="w-full">
         Create account
