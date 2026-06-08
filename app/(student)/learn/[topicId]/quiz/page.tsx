@@ -1,6 +1,5 @@
 import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { QuestionShell } from '../_components/QuestionShell'
 import { PaywallGate } from '../_components/PaywallGate'
 import { LearningClient } from '../_components/LearningClient'
 import type { Track } from '@/lib/supabase/types'
@@ -104,29 +103,24 @@ export default async function QuizPage({ params }: Props) {
         <h1 className="text-lg font-bold text-white mt-1">{topic.icon} {topic.title}</h1>
       </div>
 
-      <QuestionShell
-        track={child.track as Track}
+      <LearningClient
+        childId={child.id}
+        topicId={topicId}
         topicTitle={topic.title}
-        questionNumber={question.order_index}
+        topicIcon={topic.icon}
+        track={child.track as Track}
         totalQuestions={totalQuestions}
-        scorePct={scorePct}
-      >
-        <LearningClient
-          childId={child.id}
-          topicId={topicId}
-          topicTitle={topic.title}
-          topicIcon={topic.icon}
-          questionId={question.id}
-          questionOrderIndex={question.order_index}
-          track={child.track as Track}
-          prompt={question.prompt}
-          options={options}
-          correctAnswer={question.correct_answer}
-          explanation={question.explanation}
-          questionNumber={question.order_index}
-          scorePct={scorePct}
-        />
-      </QuestionShell>
+        initialQuestion={{
+          id: question.id,
+          orderIndex: question.order_index,
+          prompt: question.prompt,
+          options,
+          correctAnswer: question.correct_answer,
+          explanation: question.explanation,
+        }}
+        initialScorePct={scorePct}
+        initialQuestionsAnswered={progress?.questions_answered ?? 0}
+      />
     </div>
   )
 }

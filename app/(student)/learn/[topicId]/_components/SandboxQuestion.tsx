@@ -8,9 +8,10 @@ type Props = {
   correctAnswer: string
   explanation: string
   onAnswer: (isCorrect: boolean) => void
+  onNext: () => void
 }
 
-export function SandboxQuestion({ prompt, options, correctAnswer, explanation, onAnswer }: Props) {
+export function SandboxQuestion({ prompt, options, correctAnswer, explanation, onAnswer, onNext }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
 
@@ -26,7 +27,7 @@ export function SandboxQuestion({ prompt, options, correctAnswer, explanation, o
       <AnswerResult
         isCorrect={selected === correctAnswer}
         explanation={explanation}
-        onNext={() => { setSelected(null); setSubmitted(false) }}
+        onNext={onNext}
       />
     )
   }
