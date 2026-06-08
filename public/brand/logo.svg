@@ -1,0 +1,30 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="spark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e9e5ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="118" fill="url(#bg)"/>
+
+  <!-- main sparkle: represents AI / intelligence -->
+  <path d="M 256 112
+           C 272 214, 298 240, 400 256
+           C 298 272, 272 298, 256 400
+           C 240 298, 214 272, 112 256
+           C 214 240, 240 214, 256 112 Z"
+        fill="url(#spark)"/>
+
+  <!-- secondary sparkle accent -->
+  <path d="M 380 96
+           C 387 128, 400 141, 432 148
+           C 400 155, 387 168, 380 200
+           C 373 168, 360 155, 328 148
+           C 360 141, 373 128, 380 96 Z"
+        fill="#fde68a"/>
+</svg>
