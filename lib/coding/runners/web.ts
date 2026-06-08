@@ -38,12 +38,29 @@ const DEMO_BOX = `
 </div>
 `
 
-export function buildSrcDoc(cmLang: 'html' | 'css' | 'javascript', code: string): string {
+const REACT_CDN = `
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+`
+
+const BABEL_CDN = `<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>`
+
+export type WebCmLang = 'html' | 'css' | 'javascript' | 'jsx' | 'tsx' | 'typescript'
+
+export function buildSrcDoc(cmLang: WebCmLang, code: string): string {
   if (cmLang === 'html') {
     return `<!DOCTYPE html><html><head>${CONSOLE_BRIDGE}</head><body>${code}</body></html>`
   }
   if (cmLang === 'css') {
     return `<!DOCTYPE html><html><head>${CONSOLE_BRIDGE}<style>${code}</style></head><body>${DEMO_BOX}</body></html>`
+  }
+  if (cmLang === 'jsx' || cmLang === 'tsx') {
+    const presets = cmLang === 'tsx' ? 'react,typescript' : 'react'
+    return `<!DOCTYPE html><html><head>${CONSOLE_BRIDGE}${REACT_CDN}<style>body { font-family: system-ui, sans-serif; padding: 16px; color: #1e293b; }</style></head><body><div id="root"></div><script type="text/babel" data-presets="${presets}" data-type="module">${code}</script></body></html>`
+  }
+  if (cmLang === 'typescript') {
+    return `<!DOCTYPE html><html><head>${CONSOLE_BRIDGE}${BABEL_CDN}</head><body><div id="app"></div><script type="text/babel" data-presets="typescript">${code}</script></body></html>`
   }
   return `<!DOCTYPE html><html><head>${CONSOLE_BRIDGE}</head><body><div id="app"></div><script>${code}</script></body></html>`
 }

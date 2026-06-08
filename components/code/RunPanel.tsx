@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import type { CodingLanguage } from '@/lib/coding/languages'
-import { buildSrcDoc } from '@/lib/coding/runners/web'
+import { buildSrcDoc, type WebCmLang } from '@/lib/coding/runners/web'
 import { runPython } from '@/lib/coding/runners/pyodide'
 import { runPiston } from '@/lib/coding/runners/piston'
 
@@ -49,7 +49,7 @@ export function RunPanel({ language, code }: Props) {
     setTextOutput('')
 
     if (language.runner === 'web') {
-      setSrcDoc(buildSrcDoc(language.cmLang as 'html' | 'css' | 'javascript', code))
+      setSrcDoc(buildSrcDoc(language.cmLang as WebCmLang, code))
       setIsRunning(false)
       return
     }
@@ -73,7 +73,7 @@ export function RunPanel({ language, code }: Props) {
     setIsRunning(false)
   }
 
-  const showPreview = language.runner === 'web' && (language.cmLang === 'html' || language.cmLang === 'css')
+  const showPreview = language.runner === 'web' && (language.cmLang === 'html' || language.cmLang === 'css' || language.cmLang === 'jsx' || language.cmLang === 'tsx')
   const showConsole = language.runner === 'web'
   const showTextOutput = language.runner === 'pyodide' || language.runner === 'piston'
 

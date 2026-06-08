@@ -6,7 +6,7 @@ export type CodingLanguage = {
   icon: string
   accent: string // tailwind colour name, e.g. 'orange'
   tagline: string
-  cmLang: 'html' | 'css' | 'javascript' | 'python' | 'java' | 'cpp' | 'sql'
+  cmLang: 'html' | 'css' | 'javascript' | 'jsx' | 'tsx' | 'typescript' | 'python' | 'java' | 'cpp' | 'sql'
   runner: Runner
   pistonLanguage?: string
   pistonVersion?: string
@@ -32,6 +32,11 @@ export const CODING_LANGUAGES: CodingLanguage[] = [
   { slug: 'csharp', name: 'C#', icon: '🎯', accent: 'violet', tagline: "Microsoft's flagship language", cmLang: 'java', runner: 'piston', pistonLanguage: 'csharp', pistonVersion: '6.12.0' },
   { slug: 'sql', name: 'SQL', icon: '🗄️', accent: 'cyan', tagline: 'Talk to databases', cmLang: 'sql', runner: 'piston', pistonLanguage: 'sqlite3', pistonVersion: '3.36.0' },
   { slug: 'php', name: 'PHP', icon: '🐘', accent: 'fuchsia', tagline: 'Power half the web', cmLang: 'javascript', runner: 'piston', pistonLanguage: 'php', pistonVersion: '8.2.3' },
+  { slug: 'react', name: 'React', icon: '⚛️', accent: 'cyan', tagline: 'Build user interfaces with components', cmLang: 'jsx', runner: 'web' },
+  { slug: 'typescript', name: 'TypeScript', icon: '🔷', accent: 'blue', tagline: 'JavaScript with types attached', cmLang: 'typescript', runner: 'web' },
+  // Next.js is staged but not yet registered — its lesson file (nextjs.ts) is still being written.
+  // Re-add this entry once lib/coding/lessons/nextjs.ts exists and is wired into lessons/index.ts:
+  // { slug: 'nextjs', name: 'Next.js', icon: '▲', accent: 'slate', tagline: 'The React framework for the web', cmLang: 'tsx', runner: 'web' },
 ]
 
 export function getLanguage(slug: string): CodingLanguage | undefined {

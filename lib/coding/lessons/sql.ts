@@ -68,4 +68,70 @@ export const sql: CodingLesson[] = [
     example: "CREATE TABLE students (id INTEGER, name TEXT);\nCREATE TABLE scores (student_id INTEGER, subject TEXT, score INTEGER);\nINSERT INTO students VALUES (1, 'Aria'), (2, 'Leo');\nINSERT INTO scores VALUES (1, 'Math', 95), (2, 'Math', 88);\nSELECT students.name, scores.subject, scores.score\nFROM students\nINNER JOIN scores ON students.id = scores.student_id;",
     starterCode: "CREATE TABLE students (id INTEGER, name TEXT);\nCREATE TABLE scores (student_id INTEGER, score INTEGER);\nINSERT INTO students VALUES (1, 'Aria'), (2, 'Leo');\nINSERT INTO scores VALUES (1, 95), (2, 88);\nSELECT students.name, scores.score\nFROM students\nINNER JOIN scores ON students.id = scores.student_id;",
   },
+  {
+    slug: 'subqueries',
+    title: 'Subqueries',
+    summary: 'Nesting one query inside another',
+    explanation: [
+      'A subquery is a SELECT placed inside another query — in a WHERE clause to filter, or in a FROM clause as a temporary table.',
+      'The inner query runs first, and its result is used by the outer query, e.g. WHERE score > (SELECT AVG(score) FROM students).',
+    ],
+    example: "CREATE TABLE students (name TEXT, score INTEGER);\nINSERT INTO students VALUES ('Aria', 95), ('Leo', 88), ('Maya', 72);\nSELECT name, score FROM students\nWHERE score > (SELECT AVG(score) FROM students);",
+    starterCode: "CREATE TABLE students (name TEXT, score INTEGER);\nINSERT INTO students VALUES ('Aria', 95), ('Leo', 88), ('Maya', 72);\nSELECT name FROM students\nWHERE score = (SELECT MAX(score) FROM students);",
+  },
+  {
+    slug: 'unions',
+    title: 'Combining Results with UNION',
+    summary: 'Stacking the rows from two SELECT statements',
+    explanation: [
+      'UNION combines the results of two SELECT statements into one result set, removing duplicate rows.',
+      'UNION ALL does the same but keeps duplicates — both queries must select the same number of columns with compatible types.',
+    ],
+    example: "CREATE TABLE current_students (name TEXT);\nCREATE TABLE alumni (name TEXT);\nINSERT INTO current_students VALUES ('Aria'), ('Leo');\nINSERT INTO alumni VALUES ('Maya'), ('Aria');\nSELECT name FROM current_students\nUNION\nSELECT name FROM alumni;",
+    starterCode: "CREATE TABLE current_students (name TEXT);\nCREATE TABLE alumni (name TEXT);\nINSERT INTO current_students VALUES ('Aria'), ('Leo');\nINSERT INTO alumni VALUES ('Maya'), ('Aria');\nSELECT name FROM current_students\nUNION ALL\nSELECT name FROM alumni;",
+  },
+  {
+    slug: 'constraints-and-keys',
+    title: 'Constraints & Keys',
+    summary: 'Letting the database enforce your data rules',
+    explanation: [
+      'PRIMARY KEY uniquely identifies each row, NOT NULL requires a value, and UNIQUE forbids duplicates in a column.',
+      'FOREIGN KEY links a column to a primary key in another table, keeping related data consistent.',
+    ],
+    example: "CREATE TABLE students (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  email TEXT UNIQUE\n);\nCREATE TABLE scores (\n  student_id INTEGER,\n  score INTEGER,\n  FOREIGN KEY (student_id) REFERENCES students(id)\n);\nINSERT INTO students VALUES (1, 'Aria', 'aria@example.com');\nINSERT INTO scores VALUES (1, 95);\nSELECT students.name, scores.score\nFROM students\nINNER JOIN scores ON students.id = scores.student_id;",
+    starterCode: "CREATE TABLE students (\n  id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  email TEXT UNIQUE\n);\nINSERT INTO students VALUES (1, 'Aria', 'aria@example.com');\nINSERT INTO students VALUES (2, 'Leo', 'leo@example.com');\nSELECT * FROM students;",
+  },
+  {
+    slug: 'views',
+    title: 'Views',
+    summary: 'Saving a query as a reusable virtual table',
+    explanation: [
+      'CREATE VIEW name AS SELECT ...; saves a query under a name you can reuse like a table.',
+      'A view does not store data itself — every time you query it, the underlying SELECT runs again with fresh results.',
+    ],
+    example: "CREATE TABLE students (name TEXT, class TEXT, score INTEGER);\nINSERT INTO students VALUES ('Aria','A',95), ('Leo','A',88), ('Maya','B',72);\nCREATE VIEW top_students AS\n  SELECT name, class, score FROM students WHERE score >= 85;\nSELECT * FROM top_students;",
+    starterCode: "CREATE TABLE students (name TEXT, class TEXT, score INTEGER);\nINSERT INTO students VALUES ('Aria','A',95), ('Leo','A',88), ('Maya','B',72);\nCREATE VIEW class_a AS\n  SELECT name, score FROM students WHERE class = 'A';\nSELECT * FROM class_a;",
+  },
+  {
+    slug: 'transactions',
+    title: 'Transactions',
+    summary: 'Grouping changes so they all succeed or all fail',
+    explanation: [
+      'BEGIN TRANSACTION starts a group of changes that are applied together — COMMIT saves them, ROLLBACK undoes them all.',
+      'Transactions keep your data consistent: if something goes wrong partway through, ROLLBACK returns the database to where it started.',
+    ],
+    example: "CREATE TABLE accounts (name TEXT, balance INTEGER);\nINSERT INTO accounts VALUES ('Aria', 100), ('Leo', 50);\nBEGIN TRANSACTION;\nUPDATE accounts SET balance = balance - 20 WHERE name = 'Aria';\nUPDATE accounts SET balance = balance + 20 WHERE name = 'Leo';\nCOMMIT;\nSELECT * FROM accounts;",
+    starterCode: "CREATE TABLE accounts (name TEXT, balance INTEGER);\nINSERT INTO accounts VALUES ('Aria', 100), ('Leo', 50);\nBEGIN TRANSACTION;\nUPDATE accounts SET balance = balance - 100 WHERE name = 'Aria';\nROLLBACK;\nSELECT * FROM accounts;",
+  },
+  {
+    slug: 'string-and-date-functions',
+    title: 'String & Date Functions',
+    summary: 'Transforming text and working with dates in queries',
+    explanation: [
+      'SQLite has built-in string functions like UPPER(), LOWER(), LENGTH(), and SUBSTR(text, start, length) for reshaping text.',
+      "Date functions such as date('now') and strftime('%Y', column) let you compute and format dates inside a query.",
+    ],
+    example: "CREATE TABLE students (name TEXT, joined TEXT);\nINSERT INTO students VALUES ('Aria', '2024-09-01'), ('Leo', '2023-01-15');\nSELECT UPPER(name) AS shout_name,\n       LENGTH(name) AS name_length,\n       SUBSTR(name, 1, 3) AS short_name,\n       strftime('%Y', joined) AS join_year\nFROM students;",
+    starterCode: "CREATE TABLE students (name TEXT, joined TEXT);\nINSERT INTO students VALUES ('Aria', '2024-09-01'), ('Leo', '2023-01-15');\nSELECT LOWER(name) AS lower_name, strftime('%Y', joined) AS join_year\nFROM students;",
+  },
 ]

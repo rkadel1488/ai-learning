@@ -9,6 +9,8 @@ import { cpp } from './cpp'
 import { csharp } from './csharp'
 import { sql } from './sql'
 import { php } from './php'
+import { react } from './react'
+import { typescript } from './typescript'
 
 const LESSONS_BY_LANGUAGE: Record<string, CodingLesson[]> = {
   html,
@@ -21,6 +23,8 @@ const LESSONS_BY_LANGUAGE: Record<string, CodingLesson[]> = {
   csharp,
   sql,
   php,
+  react,
+  typescript,
 }
 
 export function getLessons(languageSlug: string): CodingLesson[] {
