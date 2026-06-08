@@ -49,7 +49,7 @@ export default async function QuizPage({ params }: Props) {
   if (!topicRes.data) notFound()
   const topic = topicRes.data
   const progress = progressRes.data
-  const totalQuestions = countRes.count ?? 55
+  const totalQuestions = countRes.count ?? 110
 
   // Subscription is valid if purchased within the last 365 days
   const purchase = purchaseRes.data
