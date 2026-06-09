@@ -21,6 +21,7 @@ type Question = {
 type Props = {
   childId: string
   topicId: string
+  topicOrderIndex: number
   topicTitle: string
   topicIcon: string
   track: Track
@@ -32,11 +33,11 @@ type Props = {
 
 type View =
   | { status: 'question'; question: Question; scorePct: number }
-  | { status: 'paywall'; questionsAnswered: number }
+  | { status: 'paywall' }
   | { status: 'complete' }
 
 export function LearningClient({
-  childId, topicId, topicTitle, topicIcon, track, totalQuestions,
+  childId, topicId, topicOrderIndex, topicTitle, topicIcon, track, totalQuestions,
   initialQuestion, initialScorePct, initialQuestionsAnswered,
 }: Props) {
   const [view, setView] = useState<View>({ status: 'question', question: initialQuestion, scorePct: initialScorePct })
@@ -60,7 +61,7 @@ export function LearningClient({
         correctAnswer: question.correctAnswer,
         timeTakenMs,
       }),
-      getNextQuestion({ topicId, track, orderIndex: question.orderIndex + 1 }),
+      getNextQuestion({ topicId, topicOrderIndex, track, orderIndex: question.orderIndex + 1 }),
     ]).then(([recordResult, nextResult]) => ({ newScorePct: recordResult.newScorePct, nextResult }))
 
     setQuestionsAnswered(q => q + 1)
@@ -76,14 +77,14 @@ export function LearningClient({
     if (nextResult.status === 'question') {
       setView({ status: 'question', question: nextResult.question, scorePct: newScorePct })
     } else if (nextResult.status === 'paywall') {
-      setView({ status: 'paywall', questionsAnswered })
+      setView({ status: 'paywall' })
     } else {
       setView({ status: 'complete' })
     }
   }
 
   if (view.status === 'paywall') {
-    return <PaywallGate questionsAnswered={view.questionsAnswered} />
+    return <PaywallGate />
   }
 
   if (view.status === 'complete') {

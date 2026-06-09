@@ -25,10 +25,11 @@ type Props = {
   progressPct: number
   questionsAnswered: number
   totalQuestions: number
+  isPaid?: boolean
   href: string
 }
 
-export function TopicCard({ id: _id, orderIndex, title, icon, tier, status, progressPct, questionsAnswered, totalQuestions, href }: Props) {
+export function TopicCard({ id: _id, orderIndex, title, icon, tier, status, progressPct, questionsAnswered, totalQuestions, isPaid, href }: Props) {
   const isLocked = status === 'locked'
 
   const card = (
@@ -42,6 +43,11 @@ export function TopicCard({ id: _id, orderIndex, title, icon, tier, status, prog
             <div className="flex items-center gap-2">
               <span className="text-xs font-medium text-slate-500">#{orderIndex}</span>
               <span className={`text-xs font-medium capitalize ${TIER_COLOURS[tier]}`}>{tier}</span>
+              {isPaid && (
+                <span className="text-xs font-semibold text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded px-1.5 py-0.5">
+                  PRO
+                </span>
+              )}
             </div>
             <h3 className="text-sm font-semibold text-white leading-tight">{title}</h3>
           </div>

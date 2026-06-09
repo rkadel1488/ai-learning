@@ -75,6 +75,7 @@ export async function recordAnswer(params: {
 
 export async function getNextQuestion(params: {
   topicId: string
+  topicOrderIndex: number
   track: Track
   orderIndex: number
 }) {
@@ -82,17 +83,8 @@ export async function getNextQuestion(params: {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: question } = await supabase
-    .from('questions')
-    .select('id, order_index, prompt, options, correct_answer, explanation, is_free')
-    .eq('topic_id', params.topicId)
-    .eq('track', params.track)
-    .eq('order_index', params.orderIndex)
-    .single()
-
-  if (!question) return { status: 'complete' as const }
-
-  if (!question.is_free) {
+  // Topics 4+ require a purchase — check before fetching the question
+  if (params.topicOrderIndex > 3) {
     const { data: purchase } = await supabase
       .from('purchases')
       .select('purchased_at')
@@ -105,6 +97,16 @@ export async function getNextQuestion(params: {
     )
     if (!hasPurchase) return { status: 'paywall' as const }
   }
+
+  const { data: question } = await supabase
+    .from('questions')
+    .select('id, order_index, prompt, options, correct_answer, explanation')
+    .eq('topic_id', params.topicId)
+    .eq('track', params.track)
+    .eq('order_index', params.orderIndex)
+    .single()
+
+  if (!question) return { status: 'complete' as const }
 
   const options = Array.isArray(question.options)
     ? (question.options as string[])

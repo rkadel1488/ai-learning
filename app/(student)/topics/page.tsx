@@ -18,8 +18,8 @@ export default async function TopicsPage() {
 
   if (!child) redirect('/onboarding')
 
-  // All three queries run in parallel
-  const [topicsRes, progressRes, qCountRes] = await Promise.all([
+  // All queries run in parallel
+  const [topicsRes, progressRes, qCountRes, purchaseRes] = await Promise.all([
     supabase
       .from('topics')
       .select('id, order_index, title, icon, tier')
@@ -32,7 +32,19 @@ export default async function TopicsPage() {
       .from('questions')
       .select('topic_id')
       .eq('track', child.track),
+    supabase
+      .from('purchases')
+      .select('purchased_at')
+      .eq('user_id', user.id)
+      .order('purchased_at', { ascending: false })
+      .limit(1)
+      .single(),
   ])
+
+  const purchase = purchaseRes.data
+  const hasPurchase = !!purchase && (
+    Date.now() - new Date(purchase.purchased_at).getTime() < 365 * 24 * 60 * 60 * 1000
+  )
 
   const topics = topicsRes.data ?? []
   const progressMap = new Map((progressRes.data ?? []).map(p => [p.topic_id, p]))
@@ -78,6 +90,7 @@ export default async function TopicsPage() {
               progressPct={progressPct}
               questionsAnswered={questionsAnswered}
               totalQuestions={totalQuestions}
+              isPaid={topic.order_index > 3 && !hasPurchase}
               href={`/learn/${topic.id}`}
             />
           )
