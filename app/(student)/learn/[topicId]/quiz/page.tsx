@@ -58,8 +58,10 @@ export default async function QuizPage({ params }: Props) {
 
   if (progress?.completed_at) redirect('/topics')
 
-  // Topics 4+ require a purchase — gate the entire quiz
-  if (topic.order_index > 3 && !hasPurchase) {
+  const nextIndex = (progress?.last_question_index ?? 0) + 1
+
+  // Questions 21+ require a purchase
+  if (nextIndex > 20 && !hasPurchase) {
     return (
       <div className="space-y-4 max-w-lg mx-auto">
         <div>
@@ -70,8 +72,6 @@ export default async function QuizPage({ params }: Props) {
       </div>
     )
   }
-
-  const nextIndex = (progress?.last_question_index ?? 0) + 1
   const scorePct = Math.round(Number(progress?.score_pct ?? 0))
 
   // Fetch just the specific next question
@@ -107,7 +107,6 @@ export default async function QuizPage({ params }: Props) {
       <LearningClient
         childId={child.id}
         topicId={topicId}
-        topicOrderIndex={topic.order_index}
         topicTitle={topic.title}
         topicIcon={topic.icon}
         track={child.track as Track}

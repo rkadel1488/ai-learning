@@ -75,7 +75,6 @@ export async function recordAnswer(params: {
 
 export async function getNextQuestion(params: {
   topicId: string
-  topicOrderIndex: number
   track: Track
   orderIndex: number
 }) {
@@ -83,8 +82,8 @@ export async function getNextQuestion(params: {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Topics 4+ require a purchase — check before fetching the question
-  if (params.topicOrderIndex > 3) {
+  // Questions 21+ require a purchase
+  if (params.orderIndex > 20) {
     const { data: purchase } = await supabase
       .from('purchases')
       .select('purchased_at')

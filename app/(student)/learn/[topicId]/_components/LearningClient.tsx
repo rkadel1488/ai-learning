@@ -21,7 +21,6 @@ type Question = {
 type Props = {
   childId: string
   topicId: string
-  topicOrderIndex: number
   topicTitle: string
   topicIcon: string
   track: Track
@@ -37,7 +36,7 @@ type View =
   | { status: 'complete' }
 
 export function LearningClient({
-  childId, topicId, topicOrderIndex, topicTitle, topicIcon, track, totalQuestions,
+  childId, topicId, topicTitle, topicIcon, track, totalQuestions,
   initialQuestion, initialScorePct, initialQuestionsAnswered,
 }: Props) {
   const [view, setView] = useState<View>({ status: 'question', question: initialQuestion, scorePct: initialScorePct })
@@ -61,7 +60,7 @@ export function LearningClient({
         correctAnswer: question.correctAnswer,
         timeTakenMs,
       }),
-      getNextQuestion({ topicId, topicOrderIndex, track, orderIndex: question.orderIndex + 1 }),
+      getNextQuestion({ topicId, track, orderIndex: question.orderIndex + 1 }),
     ]).then(([recordResult, nextResult]) => ({ newScorePct: recordResult.newScorePct, nextResult }))
 
     setQuestionsAnswered(q => q + 1)
