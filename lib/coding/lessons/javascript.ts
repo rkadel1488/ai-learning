@@ -155,4 +155,16 @@ export const javascript: CodingLesson[] = [
     example: "function parsePositiveNumber(value) {\n  const n = Number(value);\n  if (Number.isNaN(n)) {\n    throw new Error(`\"${value}\" is not a number`);\n  }\n  if (n <= 0) {\n    throw new Error(`${n} is not positive`);\n  }\n  return n;\n}\n\nfor (const input of ['12', 'abc', '-5']) {\n  try {\n    const n = parsePositiveNumber(input);\n    console.log(`Parsed: ${n}`);\n  } catch (error) {\n    console.log(`Error: ${error.message}`);\n  } finally {\n    console.log(`Finished checking \"${input}\"`);\n  }\n}",
     starterCode: "function divide(a, b) {\n  if (b === 0) {\n    throw new Error('Cannot divide by zero');\n  }\n  return a / b;\n}\n\ntry {\n  console.log(divide(10, 2));\n  console.log(divide(10, 0));\n} catch (error) {\n  console.log(`Caught: ${error.message}`);\n}",
   },
+  {
+    slug: 'closures-and-scope',
+    title: 'Closures & Scope',
+    summary: 'How inner functions remember the variables around them',
+    explanation: [
+      'Lexical scope means a function can see the variables that were in scope where it was defined — including variables from any enclosing (outer) function.',
+      'A closure happens when an inner function keeps access to its outer function\'s variables even after that outer function has finished running. The function "remembers" its birthplace.',
+      'This lets you create private state: a variable that only specific functions can read or change, with no other code able to reach in and mess with it directly.',
+    ],
+    example: "function makeCounter() {\n  let count = 0;\n  return () => {\n    count++;\n    return count;\n  };\n}\n\nconst counterA = makeCounter();\nconst counterB = makeCounter();\n\nconsole.log(counterA());\nconsole.log(counterA());\nconsole.log(counterA());\nconsole.log(counterB());",
+    starterCode: "function makeGreeter(greeting) {\n  return (name) => `${greeting}, ${name}!`;\n}\n\nconst sayHello = makeGreeter('Hello');\nconst sayHowdy = makeGreeter('Howdy');\n\nconsole.log(sayHello('Aria'));\nconsole.log(sayHowdy('Kiran'));",
+  },
 ]

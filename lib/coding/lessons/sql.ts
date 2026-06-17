@@ -134,4 +134,28 @@ export const sql: CodingLesson[] = [
     example: "CREATE TABLE students (name TEXT, joined TEXT);\nINSERT INTO students VALUES ('Aria', '2024-09-01'), ('Leo', '2023-01-15');\nSELECT UPPER(name) AS shout_name,\n       LENGTH(name) AS name_length,\n       SUBSTR(name, 1, 3) AS short_name,\n       strftime('%Y', joined) AS join_year\nFROM students;",
     starterCode: "CREATE TABLE students (name TEXT, joined TEXT);\nINSERT INTO students VALUES ('Aria', '2024-09-01'), ('Leo', '2023-01-15');\nSELECT LOWER(name) AS lower_name, strftime('%Y', joined) AS join_year\nFROM students;",
   },
+  {
+    slug: 'left-joins',
+    title: 'LEFT JOIN',
+    summary: 'Keeping every row from the left table, matched or not',
+    explanation: [
+      "The 'joins' lesson covered INNER JOIN, which only keeps rows that match in both tables. LEFT JOIN table2 ON table1.col = table2.col keeps every row from the left table no matter what, even if nothing matches on the right.",
+      "When there's no match, the columns from the right table are filled in with NULL instead of the row being dropped. That makes LEFT JOIN perfect for finding gaps, like students with no scores recorded yet.",
+      "SQLite supports LEFT JOIN but not RIGHT JOIN or FULL OUTER JOIN — if you need the reverse, just swap which table you list first.",
+    ],
+    example: "CREATE TABLE students (id INTEGER, name TEXT);\nCREATE TABLE scores (student_id INTEGER, subject TEXT, score INTEGER);\nINSERT INTO students VALUES (1, 'Aria'), (2, 'Leo'), (3, 'Maya');\nINSERT INTO scores VALUES (1, 'Math', 95), (2, 'Math', 88);\nSELECT students.name, scores.subject, scores.score\nFROM students\nLEFT JOIN scores ON students.id = scores.student_id;",
+    starterCode: "CREATE TABLE students (id INTEGER, name TEXT);\nCREATE TABLE scores (student_id INTEGER, score INTEGER);\nINSERT INTO students VALUES (1, 'Aria'), (2, 'Leo'), (3, 'Maya');\nINSERT INTO scores VALUES (1, 95), (2, 88);\nSELECT students.name, scores.score\nFROM students\nLEFT JOIN scores ON students.id = scores.student_id;",
+  },
+  {
+    slug: 'case-expressions',
+    title: 'CASE Expressions',
+    summary: 'Computing a conditional column inside SELECT',
+    explanation: [
+      'CASE lets you compute a value based on conditions, right inside a query. The pattern is CASE WHEN condition THEN value ... ELSE value END, and you can chain as many WHEN branches as you need.',
+      "It's commonly used to turn raw numbers into readable labels, like turning a numeric score into a 'Pass' or 'Fail' result, or a letter grade.",
+      'CASE checks each WHEN in order and uses the first one that matches, falling back to ELSE if none do — so put your most specific conditions first.',
+    ],
+    example: "CREATE TABLE students (name TEXT, score INTEGER);\nINSERT INTO students VALUES ('Aria', 95), ('Leo', 72), ('Maya', 58);\nSELECT name, score,\n       CASE\n         WHEN score >= 90 THEN 'A'\n         WHEN score >= 70 THEN 'B'\n         ELSE 'C'\n       END AS grade\nFROM students;",
+    starterCode: "CREATE TABLE students (name TEXT, score INTEGER);\nINSERT INTO students VALUES ('Aria', 95), ('Leo', 72), ('Maya', 58);\nSELECT name,\n       CASE WHEN score >= 60 THEN 'Pass' ELSE 'Fail' END AS result\nFROM students;",
+  },
 ]

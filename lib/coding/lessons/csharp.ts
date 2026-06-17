@@ -134,4 +134,26 @@ export const csharp: CodingLesson[] = [
     example: 'using System;\n\nclass InvalidAgeException : Exception {\n  public InvalidAgeException(string message) : base(message) { }\n}\n\nclass Program {\n  static void CheckAge(int age) {\n    if (age < 0) {\n      throw new InvalidAgeException("Age cannot be negative");\n    }\n    Console.WriteLine($"Age {age} is valid");\n  }\n\n  static void Main(string[] args) {\n    try {\n      int a = 10;\n      int b = 0;\n      Console.WriteLine(a / b);\n    } catch (DivideByZeroException e) {\n      Console.WriteLine($"Caught: {e.Message}");\n    } finally {\n      Console.WriteLine("Division attempt finished");\n    }\n\n    try {\n      CheckAge(-5);\n    } catch (InvalidAgeException e) {\n      Console.WriteLine($"Caught: {e.Message}");\n    }\n  }\n}',
     starterCode: 'using System;\n\nclass Program {\n  static void Main(string[] args) {\n    try {\n      int[] nums = { 1, 2, 3 };\n      Console.WriteLine(nums[5]);\n    } catch (IndexOutOfRangeException e) {\n      Console.WriteLine($"Caught an error: {e.Message}");\n    } finally {\n      Console.WriteLine("Done checking the array");\n    }\n  }\n}',
   },
+  {
+    slug: 'properties-and-enums',
+    title: 'Properties & Enums',
+    summary: 'Auto-properties and named constants with enum',
+    explanation: [
+      'A plain public field works, but a property like public string Name { get; set; } is the more idiomatic choice — it looks just as simple to use but lets you add validation or read-only logic later without breaking any code that already uses Name.',
+      'An enum defines a small, named set of values, e.g. enum Level { Beginner, Intermediate, Advanced };. Using a Level variable instead of a raw string or number makes invalid values impossible and makes your code read like plain English.',
+    ],
+    example: 'using System;\n\nenum Level { Beginner, Intermediate, Advanced }\n\nclass Player {\n  public string Name { get; set; }\n  public int Score { get; set; }\n  public Level Rank { get; set; }\n}\n\nclass Program {\n  static void Main(string[] args) {\n    Player p = new Player();\n    p.Name = "Aria";\n    p.Score = 95;\n    p.Rank = Level.Advanced;\n    Console.WriteLine($"{p.Name} scored {p.Score} and is ranked {p.Rank}");\n  }\n}',
+    starterCode: 'using System;\n\nenum Level { Beginner, Intermediate, Advanced }\n\nclass Student {\n  public string Name { get; set; }\n  public Level CurrentLevel { get; set; }\n}\n\nclass Program {\n  static void Main(string[] args) {\n    Student s = new Student();\n    s.Name = "Eli";\n    s.CurrentLevel = Level.Beginner;\n    Console.WriteLine($"{s.Name} is at the {s.CurrentLevel} level");\n  }\n}',
+  },
+  {
+    slug: 'generics',
+    title: 'Generics',
+    summary: 'Writing one class or method that works with any type',
+    explanation: [
+      'Without generics, storing different types safely would mean writing a separate class for each one, or giving up type safety entirely. Generics let you write a single class or method with a placeholder type, written in angle brackets like <T>, that the compiler fills in for you each time you use it.',
+      'class Box<T> { public T Value; } defines a box that can hold any type — Box<int> for a number, Box<string> for text — while still catching type mistakes at compile time. The List<T> you used in the collections lesson is built exactly this way; now you know how to write your own.',
+    ],
+    example: 'using System;\n\nclass Box<T> {\n  public T Value;\n\n  public Box(T value) {\n    Value = value;\n  }\n\n  public void Print() {\n    Console.WriteLine($"Box contains: {Value}");\n  }\n}\n\nclass Program {\n  static void Main(string[] args) {\n    Box<string> nameBox = new Box<string>("Aria");\n    Box<int> numberBox = new Box<int>(42);\n    nameBox.Print();\n    numberBox.Print();\n  }\n}',
+    starterCode: 'using System;\n\nclass Box<T> {\n  public T Value;\n\n  public Box(T value) {\n    Value = value;\n  }\n}\n\nclass Program {\n  static void Main(string[] args) {\n    Box<int> ageBox = new Box<int>(12);\n    Box<string> cityBox = new Box<string>("Pokhara");\n    Console.WriteLine(ageBox.Value);\n    Console.WriteLine(cityBox.Value);\n  }\n}',
+  },
 ]

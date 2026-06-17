@@ -154,4 +154,16 @@ export const css: CodingLesson[] = [
     example: '@keyframes bounce {\n  0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-16px); }\n}\n#title {\n  display: inline-block;\n  animation: bounce 1.2s ease-in-out infinite;\n}',
     starterCode: '@keyframes pulse {\n  0% { transform: scale(1); }\n  50% { transform: scale(1.15); }\n  100% { transform: scale(1); }\n}\n#btn {\n  animation: pulse 1.5s ease-in-out infinite;\n}',
   },
+  {
+    slug: 'specificity-and-cascade',
+    title: 'Specificity & the Cascade',
+    summary: 'How the browser decides which rule wins when several apply',
+    explanation: [
+      'When more than one rule targets the same element, the browser has to pick a winner. It does this in two stages: first by specificity (how precise a selector is), and if that ties, by the cascade (later rules in the stylesheet beat earlier ones).',
+      'Specificity is roughly a points system — ID selectors (#title) score highest, class and attribute selectors (.highlight) score in the middle, and plain element selectors (p, h1) score lowest. A single #title will always beat a single .highlight, no matter which one is written last.',
+      'The !important keyword overrides normal specificity entirely, but it should be used sparingly — once several rules fight with !important, there is no clean way to tell which one wins, and debugging styles becomes painful.',
+    ],
+    example: 'p {\n  color: slategray;\n}\n.highlight {\n  color: darkorange;\n}\n#title {\n  color: crimson;\n}',
+    starterCode: 'h1 {\n  color: teal;\n}\n#title {\n  color: crimson;\n}',
+  },
 ]

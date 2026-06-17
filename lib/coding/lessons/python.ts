@@ -154,4 +154,16 @@ export const python: CodingLesson[] = [
     example: "import math\nimport random\n\nprint(math.sqrt(144))\nprint(round(math.pi, 2))\n\nrandom.seed(42)\nprint(random.randint(1, 10))\n\nnames = ['Maya', 'Aria', 'Kiran']\nscores = [85, 92, 78]\n\nfor index, name in enumerate(names, start=1):\n    print(f'{index}. {name}')\n\nfor name, score in zip(names, scores):\n    print(f'{name}: {score}')\n\nprint(sorted(scores, reverse=True))\nprint(list(map(lambda s: s + 5, scores)))\nprint(list(filter(lambda s: s >= 85, scores)))",
     starterCode: "import math\n\nvalues = [4, 9, 16, 25]\nroots = list(map(math.sqrt, values))\nprint(roots)\n\nfor index, value in enumerate(values):\n    print(f'{index}: {value}')\n\nprint(sorted(values, reverse=True))",
   },
+  {
+    slug: 'args-kwargs-and-lambda',
+    title: '*args, **kwargs & Lambda',
+    summary: 'Flexible function signatures and tiny anonymous functions',
+    explanation: [
+      'def f(*args): collects any number of positional arguments into a tuple named args, so a function can accept 0, 1, or 100 values without changing its signature.',
+      'def f(**kwargs): collects any number of named arguments into a dict named kwargs, letting callers pass arbitrary keyword=value pairs.',
+      'lambda x: x * 2 creates a small anonymous function inline — handy as a quick argument to something like sorted(..., key=...) or map(...) when writing a full def would be overkill.',
+    ],
+    example: "def total(*args):\n    return sum(args)\n\nprint(total(1, 2, 3))\nprint(total(10, 20))\n\ndef describe(**kwargs):\n    for key, value in kwargs.items():\n        print(f'{key}: {value}')\n\ndescribe(name='Aria', grade=7)\n\nsquare = lambda x: x * 2\nprint(square(21))\n\npeople = [('Maya', 92), ('Aria', 78), ('Kiran', 85)]\nby_score = sorted(people, key=lambda person: person[1], reverse=True)\nprint(by_score)",
+    starterCode: "def multiply_all(*args):\n    result = 1\n    for n in args:\n        result *= n\n    return result\n\nprint(multiply_all(2, 3, 4))\n\nwords = ['fig', 'banana', 'kiwi']\nprint(sorted(words, key=lambda w: len(w)))",
+  },
 ]

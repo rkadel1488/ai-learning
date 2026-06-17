@@ -142,4 +142,28 @@ export const html: CodingLesson[] = [
     example: '<h1>Trip Planner</h1>\n<h2>Destinations</h2>\n<img src="https://placekitten.com/200/120" alt="A scenic mountain lake at sunrise">\n<form>\n  <label for="dest">Where to?</label>\n  <input id="dest" type="text" name="destination">\n  <button aria-label="Search destinations">🔍</button>\n</form>',
     starterCode: '<h1>My Page</h1>\n<img src="https://placekitten.com/180/120" alt="A kitten playing with yarn">\n<label for="name">Your name</label>\n<input id="name" type="text">',
   },
+  {
+    slug: 'form-validation',
+    title: 'Form Validation',
+    summary: 'Letting the browser check input before it is submitted',
+    explanation: [
+      'HTML can validate form fields for you, with no JavaScript required. Add the required attribute to make a field mandatory, and the browser will block submission and show a hint if it is left empty.',
+      'The pattern attribute checks a text field against a regular expression — handy for things like a postcode or product code — while minlength/maxlength limit how many characters can be typed, and min/max limit the allowed range on a number input.',
+      'By default the browser shows a generic message when a field is invalid. Add a title attribute with a short description of what is expected, and the browser uses it as a custom hint in that validation popup.',
+    ],
+    example: '<form>\n  <label>Username (required): <input type="text" name="username" required></label><br>\n  <label>Product code: <input type="text" name="code" pattern="[A-Z]{3}-[0-9]{4}" title="Format: ABC-1234"></label><br>\n  <label>Age: <input type="number" name="age" min="18" max="99"></label><br>\n  <button type="submit">Submit</button>\n</form>',
+    starterCode: '<form>\n  <label>Email (required): <input type="email" name="email" required></label><br>\n  <label>Zip code: <input type="text" pattern="[0-9]{5}" title="Five digits, e.g. 90210"></label><br>\n  <button type="submit">Submit</button>\n</form>',
+  },
+  {
+    slug: 'details-and-meta',
+    title: 'Details, Summary & Meta Tags',
+    summary: 'A built-in collapsible widget, plus useful tags hidden in <head>',
+    explanation: [
+      'The <details> element is a disclosure widget that shows or hides extra content — and it works without a single line of JavaScript. Its first child should be a <summary> element, which acts as the always-visible label the user clicks to expand or collapse the rest.',
+      'Add the open attribute to <details> to have it start out expanded instead of collapsed.',
+      'Back in the comments-and-document-structure lesson, you saw that <head> holds metadata rather than visible content. Three common meta tags live there: <meta charset="UTF-8"> tells the browser which character encoding the page uses, <meta name="viewport" content="width=device-width, initial-scale=1"> makes a page render sensibly on mobile screens, and <meta name="description" content="..."> gives search engines a short summary to show in results.',
+    ],
+    example: '<!-- A real page would also have this in its <head>: -->\n<!-- <meta charset="UTF-8"> -->\n<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->\n<!-- <meta name="description" content="A friendly guide to HTML basics"> -->\n\n<h2>FAQ</h2>\n<details>\n  <summary>What is HTML?</summary>\n  <p>HTML is the markup language used to structure content on the web.</p>\n</details>\n<details open>\n  <summary>Do I need JavaScript for this widget?</summary>\n  <p>Nope — the browser handles the expand and collapse for you.</p>\n</details>',
+    starterCode: '<details>\n  <summary>Click to reveal</summary>\n  <p>Surprise! This content was hidden until you clicked.</p>\n</details>',
+  },
 ]

@@ -135,4 +135,28 @@ export const php: CodingLesson[] = [
     example: '<?php\n$text = "Contact: aria@example.com or call 98765";\n\nif (preg_match(\'/[\\w.]+@[\\w.]+/\', $text, $matches)) {\n  echo "Found email: " . $matches[0] . "\\n";\n}\n\n$digitsOnly = preg_replace(\'/[^0-9]/\', \'\', $text);\necho "Digits only: $digitsOnly\\n";\n\n$masked = preg_replace(\'/[0-9]/\', \'#\', $text);\necho "Masked: $masked\\n";\n?>',
     starterCode: '<?php\n$word = "Hello123World456";\n\nif (preg_match(\'/[0-9]+/\', $word, $matches)) {\n  echo "First number found: " . $matches[0] . "\\n";\n}\n\n$lettersOnly = preg_replace(\'/[0-9]/\', \'\', $word);\necho "Letters only: $lettersOnly\\n";\n?>',
   },
+  {
+    slug: 'inheritance-and-interfaces',
+    title: 'Inheritance & Interfaces',
+    summary: 'Sharing behaviour with extends, parent::__construct, and interface',
+    explanation: [
+      'A class can extend another class to inherit its properties and methods: class Dog extends Animal { ... } makes every Dog automatically an Animal too, without copying any code.',
+      "Inside a child class's constructor, parent::__construct(...) calls the parent's constructor first, so shared setup only has to be written once. The child can then add its own properties or override a method with a new version.",
+      'An interface describes a set of methods a class promises to have, without providing the code for them. class Robot implements Greets means Robot guarantees a greet() method, which is handy when different classes need to support the same contract.',
+    ],
+    example: '<?php\nclass Animal {\n  public $name;\n\n  public function __construct($name) {\n    $this->name = $name;\n  }\n\n  public function speak() {\n    return "$this->name makes a sound";\n  }\n}\n\nclass Dog extends Animal {\n  public $breed;\n\n  public function __construct($name, $breed) {\n    parent::__construct($name);\n    $this->breed = $breed;\n  }\n\n  public function speak() {\n    return "$this->name barks";\n  }\n}\n\ninterface Greets {\n  public function greet();\n}\n\nclass Robot implements Greets {\n  public function greet() {\n    return "Beep boop, hello!";\n  }\n}\n\n$generic = new Animal("Creature");\n$rex = new Dog("Rex", "Labrador");\necho $generic->speak() . "\\n";\necho $rex->speak() . "\\n";\necho "$rex->name is a $rex->breed\\n";\n\n$bot = new Robot();\necho $bot->greet() . "\\n";\n?>',
+    starterCode: '<?php\nclass Vehicle {\n  public $wheels;\n\n  public function __construct($wheels) {\n    $this->wheels = $wheels;\n  }\n\n  public function describe() {\n    return "Has $this->wheels wheels";\n  }\n}\n\nclass Car extends Vehicle {\n  public $brand;\n\n  public function __construct($brand) {\n    parent::__construct(4);\n    $this->brand = $brand;\n  }\n}\n\n$car = new Car("Toyota");\necho $car->brand . ": " . $car->describe() . "\\n";\n?>',
+  },
+  {
+    slug: 'null-coalescing-and-ternary',
+    title: 'Null Coalescing & Ternary Operators',
+    summary: 'Shortening if/else with ?:, ??, and ??=',
+    explanation: [
+      'The ternary operator squeezes a simple if/else into one line: $x = $condition ? $a : $b; stores $a if the condition is true, otherwise $b.',
+      'The null coalescing operator ?? picks the left-hand value if it exists and is not null, otherwise it falls back to the right-hand value: $x = $maybeNull ?? $default;. It works just as well for array keys that might not be set, like $settings["fontSize"] ?? 14.',
+      'The null coalescing assignment operator ??= only assigns a new value when the variable is currently null or unset: $x ??= $default;. If $x already holds a real value, ??= leaves it untouched.',
+    ],
+    example: '<?php\n$score = 55;\n$result = $score >= 60 ? "Pass" : "Fail";\necho "Result: $result\\n";\n\n$nickname = null;\n$displayName = $nickname ?? "Anonymous";\necho "Hello, $displayName!\\n";\n\n$settings = ["theme" => "dark"];\n$fontSize = $settings["fontSize"] ?? 14;\necho "Font size: $fontSize\\n";\n\n$settings["fontSize"] ??= 16;\necho "Font size is now: " . $settings["fontSize"] . "\\n";\n?>',
+    starterCode: '<?php\n$age = 16;\n$ticketType = $age >= 18 ? "Adult" : "Child";\necho "Ticket: $ticketType\\n";\n\n$color = null;\n$chosenColor = $color ?? "blue";\necho "Color: $chosenColor\\n";\n\n$chosenColor ??= "green";\necho "Color is still: $chosenColor\\n";\n?>',
+  },
 ]

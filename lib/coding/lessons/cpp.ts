@@ -134,4 +134,28 @@ export const cpp: CodingLesson[] = [
     example: '#include <iostream>\n#include <stdexcept>\n#include <string>\nusing namespace std;\n\nclass NegativeValueError : public exception {\n  public:\n    const char *what() const throw() {\n      return "value must not be negative";\n    }\n};\n\ndouble safeSqrt(double x) {\n  if (x < 0) {\n    throw NegativeValueError();\n  }\n  return x * x;\n}\n\nint main() {\n  try {\n    cout << safeSqrt(4) << endl;\n    cout << safeSqrt(-9) << endl;\n  } catch (const NegativeValueError &e) {\n    cout << "Caught error: " << e.what() << endl;\n  }\n\n  try {\n    throw runtime_error("something went wrong");\n  } catch (const exception &e) {\n    cout << "Caught: " << e.what() << endl;\n  }\n  return 0;\n}',
     starterCode: '#include <iostream>\n#include <stdexcept>\nusing namespace std;\n\nint divide(int a, int b) {\n  if (b == 0) {\n    throw runtime_error("division by zero");\n  }\n  return a / b;\n}\n\nint main() {\n  try {\n    cout << divide(10, 2) << endl;\n    cout << divide(5, 0) << endl;\n  } catch (const exception &e) {\n    cout << "Error: " << e.what() << endl;\n  }\n  return 0;\n}',
   },
+  {
+    slug: 'templates',
+    title: 'Function Templates',
+    summary: 'Writing one function that works across types',
+    explanation: [
+      'A function template lets you write the logic once and have it work for multiple types: template <typename T> T maxOf(T a, T b) { ... } declares T as a placeholder type, filled in when the function is actually called.',
+      'When you call maxOf(3, 7), the compiler sees two ints and generates an int version of the function behind the scenes. Call maxOf(2.5, 1.1) instead, and it generates a separate double version — same source code, different specialized machine code for each type used.',
+      'This avoids writing maxOfInt, maxOfDouble, and so on by hand, while still keeping the type safety of a normal typed function.',
+    ],
+    example: '#include <iostream>\nusing namespace std;\n\ntemplate <typename T>\nT maxOf(T a, T b) {\n  return (a > b) ? a : b;\n}\n\nint main() {\n  cout << maxOf(3, 7) << endl;\n  cout << maxOf(2.5, 1.1) << endl;\n  cout << maxOf(-4, -10) << endl;\n  return 0;\n}',
+    starterCode: '#include <iostream>\nusing namespace std;\n\ntemplate <typename T>\nT minOf(T a, T b) {\n  return (a < b) ? a : b;\n}\n\nint main() {\n  cout << minOf(8, 3) << endl;\n  cout << minOf(1.5, 4.2) << endl;\n  return 0;\n}',
+  },
+  {
+    slug: 'enums-and-switch',
+    title: 'Enums & Switch Statements',
+    summary: 'Naming a fixed set of options and branching on them',
+    explanation: [
+      'An enum gives a set of named integer constants a type of their own. enum class Direction { Up, Down, Left, Right }; defines exactly four possible values, written as Direction::Up, Direction::Down, and so on — far clearer than using plain numbers.',
+      'A switch statement branches on one value across several case labels: switch (move) { case Direction::Up: ...; break; ... }. Each case runs its block until break, which stops it from falling through into the next case.',
+      'For a handful of exact-match options like a direction or a menu choice, a switch reads more cleanly than a long chain of if / else if checks, even though either approach can solve the same problem.',
+    ],
+    example: '#include <iostream>\nusing namespace std;\n\nenum class Direction { Up, Down, Left, Right };\n\nint main() {\n  Direction move = Direction::Left;\n  switch (move) {\n    case Direction::Up:\n      cout << "Moving up" << endl;\n      break;\n    case Direction::Down:\n      cout << "Moving down" << endl;\n      break;\n    case Direction::Left:\n      cout << "Moving left" << endl;\n      break;\n    case Direction::Right:\n      cout << "Moving right" << endl;\n      break;\n  }\n  return 0;\n}',
+    starterCode: '#include <iostream>\nusing namespace std;\n\nenum class Day { Mon, Tue, Wed };\n\nint main() {\n  Day today = Day::Tue;\n  switch (today) {\n    case Day::Mon:\n      cout << "Start of the week" << endl;\n      break;\n    case Day::Tue:\n      cout << "Second day" << endl;\n      break;\n    case Day::Wed:\n      cout << "Midweek" << endl;\n      break;\n  }\n  return 0;\n}',
+  },
 ]

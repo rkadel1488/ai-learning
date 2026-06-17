@@ -135,4 +135,28 @@ export const c: CodingLesson[] = [
     example: '#include <stdio.h>\n\n#define COUNT 5\n\nint main() {\n  int values[COUNT] = {12, 45, 7, 23, 39};\n  int min = values[0];\n  int max = values[0];\n  int total = 0;\n  for (int i = 0; i < COUNT; i++) {\n    if (values[i] < min) min = values[i];\n    if (values[i] > max) max = values[i];\n    total += values[i];\n  }\n  printf("Min: %d\\n", min);\n  printf("Max: %d\\n", max);\n  printf("Average: %d\\n", total / COUNT);\n  return 0;\n}',
     starterCode: '#include <stdio.h>\n\nconst int LIMIT = 3;\n\nint main() {\n  int nums[LIMIT] = {4, 8, 15};\n  int total = 0;\n  for (int i = 0; i < LIMIT; i++) {\n    total += nums[i];\n  }\n  printf("Sum: %d\\n", total);\n  return 0;\n}',
   },
+  {
+    slug: 'dynamic-memory',
+    title: 'Dynamic Memory with malloc & free',
+    summary: 'Allocating arrays at runtime and cleaning them up',
+    explanation: [
+      '#include <stdlib.h> gives you malloc, which reserves a block of memory while the program is running: int *nums = malloc(n * sizeof(int));. Unlike a regular array, the size n can be decided at runtime instead of being fixed when you write the code.',
+      'malloc can fail and return NULL if memory runs out, so it is good practice to check the pointer before using it. Once you have a valid pointer, you read and write through it just like an array: nums[i] = i * i;.',
+      'When you are done with the memory, call free(nums); to release it back to the system. Forgetting to free memory you allocated is called a memory leak — every malloc should be paired with exactly one free.',
+    ],
+    example: '#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n  int n = 5;\n  int *nums = malloc(n * sizeof(int));\n  if (nums == NULL) {\n    printf("Allocation failed\\n");\n    return 1;\n  }\n  for (int i = 0; i < n; i++) {\n    nums[i] = i * i;\n  }\n  for (int i = 0; i < n; i++) {\n    printf("%d\\n", nums[i]);\n  }\n  free(nums);\n  return 0;\n}',
+    starterCode: '#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n  int count = 3;\n  int *values = malloc(count * sizeof(int));\n  if (values == NULL) {\n    return 1;\n  }\n  values[0] = 10;\n  values[1] = 20;\n  values[2] = 30;\n  int total = 0;\n  for (int i = 0; i < count; i++) {\n    total += values[i];\n  }\n  printf("Total: %d\\n", total);\n  free(values);\n  return 0;\n}',
+  },
+  {
+    slug: 'enums-and-typedef',
+    title: 'Enums & typedef',
+    summary: 'Naming sets of constants and giving types shorter aliases',
+    explanation: [
+      'enum lets you name a set of related integer constants instead of using plain numbers: enum Level { BEGINNER, INTERMEDIATE, ADVANCED };. By default BEGINNER is 0, INTERMEDIATE is 1, and ADVANCED is 2, counting up automatically.',
+      'Enums work great with switch statements, which jump to the matching case and run its code until a break; — without break, execution would "fall through" into the next case.',
+      'typedef gives an existing type a new, shorter name. struct Point { int x; int y; }; normally requires writing struct Point every time, but typedef struct { int x; int y; } Point; lets you just write Point — this is exactly like the structs lesson, except you drop the struct keyword everywhere afterward.',
+    ],
+    example: '#include <stdio.h>\n\nenum Level { BEGINNER, INTERMEDIATE, ADVANCED };\n\ntypedef struct {\n  int x;\n  int y;\n} Point;\n\nint main() {\n  enum Level current = INTERMEDIATE;\n  switch (current) {\n    case BEGINNER:\n      printf("Just starting out\\n");\n      break;\n    case INTERMEDIATE:\n      printf("Making good progress\\n");\n      break;\n    case ADVANCED:\n      printf("Nearly an expert\\n");\n      break;\n  }\n  Point p = {3, 4};\n  printf("Point: (%d, %d)\\n", p.x, p.y);\n  return 0;\n}',
+    starterCode: '#include <stdio.h>\n\nenum Color { RED, GREEN, BLUE };\n\ntypedef struct {\n  char name[10];\n  int age;\n} Person;\n\nint main() {\n  enum Color favorite = GREEN;\n  switch (favorite) {\n    case RED:\n      printf("Red\\n");\n      break;\n    case GREEN:\n      printf("Green\\n");\n      break;\n    case BLUE:\n      printf("Blue\\n");\n      break;\n  }\n  Person p = {"Sam", 11};\n  printf("%s is %d\\n", p.name, p.age);\n  return 0;\n}',
+  },
 ]
