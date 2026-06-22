@@ -18,7 +18,7 @@ export default async function TopicsPage() {
 
   if (!child) redirect('/onboarding')
 
-  // All three queries run in parallel
+  // All queries run in parallel
   const [topicsRes, progressRes, qCountRes] = await Promise.all([
     supabase
       .from('topics')

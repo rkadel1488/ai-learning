@@ -3,10 +3,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { calcScorePct } from '@/lib/learning/progress'
 import { redirect } from 'next/navigation'
+import type { Track } from '@/lib/supabase/types'
 
 export async function recordAnswer(params: {
   childId: string
   topicId: string
+  track: Track
   questionId: string
   questionOrderIndex: number
   answerGiven: string
@@ -37,7 +39,8 @@ export async function recordAnswer(params: {
     supabase
       .from('questions')
       .select('id', { count: 'exact', head: true })
-      .eq('topic_id', params.topicId),
+      .eq('topic_id', params.topicId)
+      .eq('track', params.track),
   ])
 
   const existing = progressResult.data
@@ -68,4 +71,55 @@ export async function recordAnswer(params: {
   }
 
   return { isCorrect, newScorePct, isTopicComplete, certEarned }
+}
+
+export async function getNextQuestion(params: {
+  topicId: string
+  track: Track
+  orderIndex: number
+}) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  // Questions 21+ require a purchase
+  if (params.orderIndex > 20) {
+    const { data: purchase } = await supabase
+      .from('purchases')
+      .select('purchased_at')
+      .eq('user_id', user.id)
+      .order('purchased_at', { ascending: false })
+      .limit(1)
+      .single()
+    const hasPurchase = !!purchase && (
+      Date.now() - new Date(purchase.purchased_at).getTime() < 365 * 24 * 60 * 60 * 1000
+    )
+    if (!hasPurchase) return { status: 'paywall' as const }
+  }
+
+  const { data: question } = await supabase
+    .from('questions')
+    .select('id, order_index, prompt, options, correct_answer, explanation')
+    .eq('topic_id', params.topicId)
+    .eq('track', params.track)
+    .eq('order_index', params.orderIndex)
+    .single()
+
+  if (!question) return { status: 'complete' as const }
+
+  const options = Array.isArray(question.options)
+    ? (question.options as string[])
+    : (JSON.parse(question.options as unknown as string) as string[])
+
+  return {
+    status: 'question' as const,
+    question: {
+      id: question.id,
+      orderIndex: question.order_index,
+      prompt: question.prompt,
+      options,
+      correctAnswer: question.correct_answer,
+      explanation: question.explanation,
+    },
+  }
 }

@@ -8,9 +8,10 @@ type Props = {
   correctAnswer: string
   explanation: string
   onAnswer: (isCorrect: boolean) => void
+  onNext: () => void
 }
 
-export function StoryQuestion({ prompt, options, correctAnswer, explanation, onAnswer }: Props) {
+export function StoryQuestion({ prompt, options, correctAnswer, explanation, onAnswer, onNext }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
 
@@ -25,7 +26,7 @@ export function StoryQuestion({ prompt, options, correctAnswer, explanation, onA
       <AnswerResult
         isCorrect={selected === correctAnswer}
         explanation={explanation}
-        onNext={() => { setSelected(null); setSubmitted(false) }}
+        onNext={onNext}
       />
     )
   }

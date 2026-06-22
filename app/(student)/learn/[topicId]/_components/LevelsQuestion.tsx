@@ -10,9 +10,10 @@ type Props = {
   questionNumber: number
   scorePct: number
   onAnswer: (isCorrect: boolean) => void
+  onNext: () => void
 }
 
-export function LevelsQuestion({ prompt, options, correctAnswer, explanation, questionNumber, scorePct, onAnswer }: Props) {
+export function LevelsQuestion({ prompt, options, correctAnswer, explanation, questionNumber, scorePct, onAnswer, onNext }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
 
@@ -28,7 +29,7 @@ export function LevelsQuestion({ prompt, options, correctAnswer, explanation, qu
       <AnswerResult
         isCorrect={selected === correctAnswer}
         explanation={explanation}
-        onNext={() => { setSelected(null); setSubmitted(false) }}
+        onNext={onNext}
       />
     )
   }
