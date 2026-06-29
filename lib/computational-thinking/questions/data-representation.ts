@@ -303,4 +303,157 @@ export const dataRepresentation: CTQuestion[] = [
     explanation:
       'Since there are multiple obstacles, each needing its own x and y position, a list of coordinate pairs keeps every obstacle\'s location distinct and easy to process one at a time.',
   },
+  {
+    slug: 'data-representation-26',
+    question: 'What decimal (base-10) number does the binary number 1101 represent?',
+    options: ['11', '12', '13', '14'],
+    correctIndex: 2,
+    explanation:
+      'In binary, 1101 means (1×8) + (1×4) + (0×2) + (1×1) = 8 + 4 + 0 + 1 = 13, so 1101 in binary equals 13 in decimal.',
+  },
+  {
+    slug: 'data-representation-27',
+    question: 'What decimal (base-10) number does the binary number 10011 represent?',
+    options: ['17', '18', '19', '21'],
+    correctIndex: 2,
+    explanation:
+      'In binary, 10011 means (1×16) + (0×8) + (0×4) + (1×2) + (1×1) = 16 + 0 + 0 + 2 + 1 = 19, so 10011 in binary equals 19 in decimal.',
+  },
+  {
+    slug: 'data-representation-28',
+    question: 'How would the decimal number 21 be written in binary?',
+    options: ['10101', '10110', '11001', '10011'],
+    correctIndex: 0,
+    explanation:
+      '21 can be made from 16 + 4 + 1, which is (1×16) + (0×8) + (1×4) + (0×2) + (1×1), so 21 in binary is written as 10101.',
+  },
+  {
+    slug: 'data-representation-29',
+    question: 'How would the decimal number 14 be written in binary?',
+    options: ['1011', '1100', '1110', '1111'],
+    correctIndex: 2,
+    explanation:
+      '14 can be made from 8 + 4 + 2, which is (1×8) + (1×4) + (1×2) + (0×1), so 14 in binary is written as 1110.',
+  },
+  {
+    slug: 'data-representation-30',
+    question:
+      'A vending machine stores the price of a snack as 1.50. What data type should this be so the machine can calculate change correctly?',
+    options: ['String', 'A number (with decimals)', 'Boolean', 'List'],
+    correctIndex: 1,
+    explanation:
+      'Since the price needs to be added, subtracted, or compared during a transaction, it should be stored as a number that supports decimals, not as text.',
+  },
+  {
+    slug: 'data-representation-31',
+    question:
+      'An attendance app stores "isPresent" for each student as either true or false, but stores each student\'s name as text. What data types are being used here?',
+    options: [
+      '"isPresent" is a string, and the name is a boolean',
+      '"isPresent" is a boolean, and the name is a string',
+      'Both "isPresent" and the name are numbers',
+      'Both "isPresent" and the name are lists',
+    ],
+    correctIndex: 1,
+    explanation:
+      'A value that can only be true or false is a boolean, while text like a person\'s name is stored as a string, so each piece of data uses the data type that matches what it represents.',
+  },
+  {
+    slug: 'data-representation-32',
+    question:
+      'Which of these is the best example of a "set," a collection that does not allow duplicate values?',
+    options: [
+      'A list of the same song played 5 times in a row',
+      'A collection of unique student ID numbers in a school, where no ID can appear twice',
+      'A single key-value pair like "score": 100',
+      'A table with repeated rows for the same person',
+    ],
+    correctIndex: 1,
+    explanation:
+      'A set is designed to hold only unique values with no repeats, which fits perfectly with student ID numbers since every student must have a different ID.',
+  },
+  {
+    slug: 'data-representation-33',
+    question:
+      'You want to store a tic-tac-toe board, which has 3 rows and 3 columns, each holding "X", "O", or empty. Which representation fits best?',
+    options: [
+      'A single string with no rows or columns, just nine letters in a row',
+      'A 3-by-3 grid (a list of 3 lists, each with 3 values) matching the board\'s rows and columns',
+      'A single boolean for the whole board',
+      'One key-value pair where the key is "board" and the value is a single number',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Since the board naturally has rows and columns, a grid made of a list of lists mirrors that 3-by-3 layout, making it easy to check or update any specific square by its row and column.',
+  },
+  {
+    slug: 'data-representation-34',
+    question:
+      'An online store needs to track a shopping cart: each item has a name, a price, and a quantity, and the cart can hold many items. Which representation fits best?',
+    options: [
+      'A single number representing the total cost only',
+      'A list of dictionaries, where each dictionary holds one item\'s name, price, and quantity',
+      'A single boolean saying whether the cart is empty',
+      'One long string combining every item\'s details with no separation',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Each cart item has multiple related details (name, price, quantity), so a list of dictionaries lets every item keep its own labeled information while still being part of one ordered cart.',
+  },
+  {
+    slug: 'data-representation-35',
+    question:
+      'A student wants to store their weekly class schedule: for each day, a list of class periods, and for each period, a subject name and a room number. Which representation fits best?',
+    options: [
+      'A single string listing every class for the whole week with no structure',
+      'A dictionary where each day is a key, and its value is a list of dictionaries holding each period\'s subject and room number',
+      'A single boolean for each day saying whether there is school',
+      'One shared number representing the entire week\'s schedule',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Since the schedule has days containing multiple periods, and each period has its own subject and room, nesting a list of dictionaries inside a day-keyed dictionary matches that layered structure well.',
+  },
+  {
+    slug: 'data-representation-36',
+    question:
+      'A hiking app needs to store a location as GPS coordinates: a latitude and a longitude. Which representation fits best?',
+    options: [
+      'A single string combining both numbers with no clear separation, like "404060"',
+      'A boolean saying whether the location exists',
+      'A key-value pair (or pair of numbers) like "latitude": 40.4, "longitude": -60.6',
+      'A list of ten unrelated numbers',
+    ],
+    correctIndex: 2,
+    explanation:
+      'A GPS location is made of exactly two related numbers, latitude and longitude, so pairing them as labeled values keeps their meaning clear and avoids confusing one for the other.',
+  },
+  {
+    slug: 'data-representation-37',
+    question:
+      'A library catalog needs to store, for thousands of books, the title, author, and number of copies available. Why is a table (or list of dictionaries with the same keys) better than one giant unstructured string?',
+    options: [
+      'Because a single string actually uses less memory and is just as easy to search',
+      'Because a table lets the app reliably find and update one specific book\'s details without accidentally mixing it up with another book\'s information',
+      'Because tables cannot hold text, only numbers',
+      'Because a single string can store numbers but a table cannot',
+    ],
+    correctIndex: 1,
+    explanation:
+      'A table keeps each book\'s title, author, and copy count organized in its own row with consistent columns, making it far easier and safer to search, update, or sort than one long unstructured string.',
+  },
+  {
+    slug: 'data-representation-38',
+    question:
+      'A teacher wants to quickly check, using just one value, whether a single student has submitted their homework. Which representation is most appropriate?',
+    options: [
+      'A list of every student in the school',
+      'A full table with many unrelated columns',
+      'A single boolean value, like "submitted": true or "submitted": false',
+      'A nested dictionary containing every assignment ever given',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Since the question only needs a yes/no answer for one student, a single boolean value is the simplest and most appropriate representation, without adding unnecessary structure.',
+  },
 ]

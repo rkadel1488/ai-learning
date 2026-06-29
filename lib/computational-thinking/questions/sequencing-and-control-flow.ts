@@ -319,4 +319,142 @@ export const sequencingAndControlFlow: CTQuestion[] = [
     explanation:
       'The savings go 1, then 3, then 5, then 7, then 9: the condition (less than 8) is true before each of those first four additions, so the addition runs 4 times, and the loop stops once savings reach 9, since 9 is no longer less than 8.',
   },
+  {
+    slug: 'sequencing-and-control-flow-28',
+    question:
+      'A set of instructions for planting a seed says: 1) Water the soil, 2) Cover the seed with soil, 3) Dig a small hole, 4) Drop the seed in the hole. What is the correct order for these steps?',
+    options: [
+      'Dig a small hole, drop the seed in the hole, cover the seed with soil, water the soil',
+      'Water the soil, dig a small hole, drop the seed in the hole, cover the seed with soil',
+      'Drop the seed in the hole, dig a small hole, cover the seed with soil, water the soil',
+      'The order shown is already correct',
+    ],
+    correctIndex: 0,
+    explanation:
+      'You need a hole before you can drop the seed in it, and the seed needs to be covered before watering makes sense on top, so the correct order is dig, drop, cover, then water.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-29',
+    question:
+      'Instructions for charging a phone say: 1) Plug the charger into the wall, 2) Plug the cable into the phone, 3) Wait for the battery to fill, 4) Unplug everything. A person does step 4 right after step 1. What goes wrong?',
+    options: [
+      'Nothing goes wrong, the phone still charges normally',
+      'The phone is unplugged before it ever gets connected or charged, so it never actually charges',
+      'The charger gets damaged from being plugged in too early',
+      'The steps need a loop instead of a sequence',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Unplugging everything right after plugging in the wall charger skips the connecting and waiting steps entirely, so the phone never actually receives any charge.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-30',
+    question:
+      'Instructions say: "Repeat 6 times: take one breath." How many total breaths happen?',
+    options: ['5', '6', '7', '12'],
+    correctIndex: 1,
+    explanation:
+      'A "repeat 6 times" loop performs its single inner action exactly 6 times, so 6 breaths happen in total.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-31',
+    question:
+      'A loop says: "Start at 20. Repeat 5 times: print the number, then subtract 4 from the number." What numbers get printed, in order?',
+    options: [
+      '20, 16, 12, 8, 4',
+      '16, 12, 8, 4, 0',
+      '20, 16, 12, 8',
+      '20, 15, 10, 5, 0',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Starting at 20 and subtracting 4 after each print across 5 repetitions prints 20, then 16, then 12, then 8, then 4, stopping right after the 5th repetition.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-32',
+    question:
+      'Instructions say: "Repeat 4 times: [hop once, clap twice]." How many total actions (hops plus claps) happen?',
+    options: ['8', '9', '12', '16'],
+    correctIndex: 2,
+    explanation:
+      'Each repetition performs 1 hop and 2 claps, which is 3 actions per repetition, and with 4 repetitions that gives 4 x 3 = 12 actions total.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-33',
+    question:
+      'Instructions say: "If the test score is 90 or above, give an A. Else if the score is 80 or above, give a B. Else if the score is 70 or above, give a C. Otherwise, give a D." A student scores exactly 80. What grade do they get?',
+    options: ['A', 'B', 'C', 'D'],
+    correctIndex: 1,
+    explanation:
+      'The first condition (90 or above) is false for a score of 80, but the second condition (80 or above) is true, so the B branch runs and the later branches are skipped.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-34',
+    question:
+      'Instructions say: "If the weather is cold and it is also windy, wear a heavy coat. Otherwise, wear a light jacket." It is cold but not windy. What does the person wear?',
+    options: [
+      'A heavy coat, because it is cold',
+      'A light jacket, because both conditions must be true for the heavy coat branch, and windy is false',
+      'No jacket at all, since only one condition is true',
+      'Both a heavy coat and a light jacket',
+    ],
+    correctIndex: 1,
+    explanation:
+      'The heavy coat branch requires cold AND windy to both be true; since it is not windy, that combined condition is false, so the otherwise branch (light jacket) runs instead.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-35',
+    question:
+      'Instructions say: "Repeat 5 times: [if the number is even, say \'even\'; otherwise, say \'odd\']." The numbers checked in order are 3, 4, 7, 8, 10. How many times does the instructions say "even"?',
+    options: ['2', '3', '4', '5'],
+    correctIndex: 1,
+    explanation:
+      'Checking each number fresh: 3 is odd, 4 is even, 7 is odd, 8 is even, and 10 is even, so "even" is said exactly 3 times (for 4, 8, and 10).',
+  },
+  {
+    slug: 'sequencing-and-control-flow-36',
+    question:
+      'A loop says: "While the basket has fewer than 5 apples, repeat: add 1 apple." The basket starts with 2 apples. How many times does the loop add an apple before it stops?',
+    options: ['2 times', '3 times', '4 times', '5 times'],
+    correctIndex: 1,
+    explanation:
+      'The basket goes 2, 3, 4, then 5: the condition (fewer than 5) is true before each of the first three additions, so the loop adds an apple 3 times and stops once the basket reaches 5.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-37',
+    question:
+      'A nested loop says: "Repeat 3 times: [repeat 4 times: water one plant]." A gardener changes the inner loop from 4 times to 6 times. How many total plants get watered now, and how many more is that than before?',
+    options: [
+      '18 plants total, which is 6 more than before',
+      '12 plants total, which is 6 more than before',
+      '9 plants total, which is 3 more than before',
+      '18 plants total, which is 12 more than before',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Before the change, watering was 3 x 4 = 12 plants; after changing the inner loop to 6, it becomes 3 x 6 = 18 plants, which is 6 more than the original 12.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-38',
+    question:
+      'A loop is supposed to stop "once 3 errors have been found," but it is written as: "Repeat: check a file. Stop the loop after more than 3 errors have been found." If errors are found one at a time (1 error per file, no skipping), how many files get checked before the loop stops, and what mistake does this make?',
+    options: [
+      'It checks exactly 3 files; there is no mistake',
+      'It checks 4 files instead of 3, because "more than 3" does not stop until the count reaches 4, one extra repetition past what was intended',
+      'It never stops, because "more than 3" can never be reached',
+      'It checks 2 files, stopping one repetition too early',
+    ],
+    correctIndex: 1,
+    explanation:
+      'The stopping condition needed was "3 or more," but "more than 3" only becomes true once the count hits 4, so the loop runs one extra, unintended repetition before stopping.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-39',
+    question:
+      'Instructions say: "Repeat 3 times: [repeat 3 times: if the switch is on, add 1 point]." The switch is on for every single check. How many total points are added?',
+    options: ['3', '6', '9', '12'],
+    correctIndex: 2,
+    explanation:
+      'The inner loop checks the condition 3 times for every pass of the outer loop, and since the switch is always on, each inner loop adds 3 points; with the outer loop running 3 times, the total is 3 x 3 = 9 points.',
+  },
 ]
