@@ -49,10 +49,11 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   }
 
   const navLinks = [
-    { href: '/dashboard', label: 'Home',    icon: '🏠' },
-    { href: '/topics',    label: 'Learn',   icon: '📚' },
-    { href: '/code',      label: 'Code',    icon: '💻' },
-    { href: '/friends',   label: 'Friends', icon: '👥' },
+    { href: '/dashboard',               label: 'Home',    icon: '🏠' },
+    { href: '/topics',                  label: 'Learn',   icon: '📚' },
+    { href: '/code',                    label: 'Code',    icon: '💻' },
+    { href: '/computational-thinking',  label: 'Think',   icon: '🧠' },
+    { href: '/friends',                 label: 'Friends', icon: '👥' },
   ]
 
   return (
