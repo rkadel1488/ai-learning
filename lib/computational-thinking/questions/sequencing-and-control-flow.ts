@@ -191,4 +191,132 @@ export const sequencingAndControlFlow: CTQuestion[] = [
     explanation:
       'Because step 1 depends on dominoes already being stood up in step 2, doing it first means there is nothing to knock over yet, so the sequence order breaks the intended outcome.',
   },
+  {
+    slug: 'sequencing-and-control-flow-16',
+    question:
+      'A set of instructions for making a sandwich says: 1) Put the sandwich in a bag, 2) Add the filling, 3) Lay out two slices of bread, 4) Close the sandwich. What is wrong with this sequence?',
+    options: [
+      'Nothing is wrong, sandwiches can be made in any order',
+      'Step 1 happens far too early, before the bread, filling, and closing steps that need to come first',
+      'There should be more than two slices of bread',
+      'The filling step should be removed entirely',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Bagging the sandwich before it even has bread, filling, or is closed means the later steps cannot be done properly, so the order of steps breaks the plan.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-17',
+    question:
+      'A washing machine program lists: 1) Spin dry the clothes, 2) Add detergent, 3) Fill with water, 4) Wash the clothes. In which order should these steps actually run for the laundry to come out clean?',
+    options: [
+      'The order shown is already correct',
+      'Fill with water, add detergent, wash the clothes, spin dry the clothes',
+      'Spin dry the clothes, wash the clothes, fill with water, add detergent',
+      'Add detergent, spin dry the clothes, fill with water, wash the clothes',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Water and detergent need to be in the machine before washing can happen, and spinning dry only makes sense after the wash is done, so the correct sequence is fill, add detergent, wash, then spin dry.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-18',
+    question:
+      'Instructions say: "Repeat 7 times: take one step forward." How many total steps forward are taken?',
+    options: ['6', '7', '8', '14'],
+    correctIndex: 1,
+    explanation:
+      'A "repeat 7 times" loop performs its single inner action exactly 7 times, so 7 steps forward are taken in total.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-19',
+    question:
+      'Instructions say: "Repeat 5 times: [draw a square, color it blue]." How many total actions (squares drawn plus colorings) happen?',
+    options: ['5', '7', '10', '15'],
+    correctIndex: 2,
+    explanation:
+      'Each of the 5 repetitions performs 2 actions (draw, then color), so the total number of actions is 5 x 2 = 10.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-20',
+    question:
+      'A loop says: "Start at 2. Repeat 4 times: print the number, then add 2 to the number." What numbers get printed, in order?',
+    options: ['2, 4, 6, 8', '2, 4, 6, 8, 10', '0, 2, 4, 6', '2, 3, 4, 5'],
+    correctIndex: 0,
+    explanation:
+      'Starting at 2 and adding 2 after each print across 4 repetitions prints 2, then 4, then 6, then 8, stopping right after the 4th repetition.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-21',
+    question:
+      'Instructions say: "If the backpack weighs more than 10 pounds, take out a book. Otherwise, zip it up and go." The backpack weighs exactly 10 pounds. What should happen?',
+    options: [
+      'A book is taken out, because the weight is at the limit',
+      'The backpack is zipped up and the person goes, because 10 is not more than 10',
+      'Nothing happens, since the condition is unclear',
+      'Both actions happen at the same time',
+    ],
+    correctIndex: 1,
+    explanation:
+      'The condition checks for "more than 10," and exactly 10 does not satisfy that, so the condition is false and the otherwise branch (zip up and go) runs.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-22',
+    question:
+      'Instructions say: "If the traffic light is red, stop. If it is yellow, slow down. If it is green, go." The light is yellow. What does the driver do?',
+    options: ['Stops', 'Slows down', 'Goes', 'Does all three actions'],
+    correctIndex: 1,
+    explanation:
+      'Each condition is checked in order, and since the light is yellow, only the matching "slow down" branch runs while the other branches are skipped.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-23',
+    question:
+      'Instructions say: "Repeat 5 times: if the coin flip is heads, add a point; otherwise, add nothing." The flips come out heads, tails, heads, heads, tails. How many points are added in total?',
+    options: ['2', '3', '4', '5'],
+    correctIndex: 1,
+    explanation:
+      'The condition is checked fresh on each of the 5 repetitions, and it is true (heads) on the 1st, 3rd, and 4th flips, giving exactly 3 points.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-24',
+    question:
+      'A vending machine loop says: "Repeat 5 times: ask for a snack code, then dispense the snack." A separate rule says: "If the machine runs out of snacks, stop immediately." The machine runs out after the 3rd snack is dispensed. How many times does the loop actually run?',
+    options: ['5', '4', '3', '0'],
+    correctIndex: 2,
+    explanation:
+      'The "stop immediately" rule interrupts the loop as soon as the out-of-snacks condition becomes true, so the loop only completes 3 repetitions instead of all 5.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-25',
+    question:
+      'A double loop says: "Repeat 3 times: [repeat 2 times: ring a bell]." How many total bell rings happen?',
+    options: ['3', '5', '6', '9'],
+    correctIndex: 2,
+    explanation:
+      'The inner loop rings the bell 2 times during each pass of the outer loop, and the outer loop runs 3 times, so the total is 3 x 2 = 6 bell rings.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-26',
+    question:
+      'A nested loop says: "Repeat 4 times: [repeat 3 times: stack one block]." How many blocks are stacked in total, and how does changing the outer loop to 5 times instead of 4 affect the total?',
+    options: [
+      '12 blocks total; changing the outer loop to 5 would make it 15 blocks',
+      '7 blocks total; changing the outer loop to 5 would make it 8 blocks',
+      '12 blocks total; changing the outer loop to 5 would not change the total',
+      '4 blocks total; changing the outer loop to 5 would make it 5 blocks',
+    ],
+    correctIndex: 0,
+    explanation:
+      'The inner loop stacks 3 blocks each time the outer loop runs, so 4 outer repetitions give 4 x 3 = 12 blocks, and increasing the outer loop to 5 would give 5 x 3 = 15 blocks.',
+  },
+  {
+    slug: 'sequencing-and-control-flow-27',
+    question:
+      'A savings loop says: "Start with 1 dollar saved. While the saved amount is less than 8 dollars, repeat: add 2 dollars to the savings." How many times does the addition step run before the loop stops?',
+    options: ['2 times', '3 times', '4 times', '8 times'],
+    correctIndex: 2,
+    explanation:
+      'The savings go 1, then 3, then 5, then 7, then 9: the condition (less than 8) is true before each of those first four additions, so the addition runs 4 times, and the loop stops once savings reach 9, since 9 is no longer less than 8.',
+  },
 ]

@@ -166,4 +166,141 @@ export const dataRepresentation: CTQuestion[] = [
     explanation:
       'Since there are multiple players who each need their own name paired with their own true/false result, a table or list of key-value pairs correctly keeps each player\'s name connected to their individual win/loss status.',
   },
+  {
+    slug: 'data-representation-14',
+    question: 'What decimal (base-10) number does the binary number 1100 represent?',
+    options: ['10', '11', '12', '14'],
+    correctIndex: 2,
+    explanation:
+      'In binary, 1100 means (1×8) + (1×4) + (0×2) + (0×1) = 8 + 4 + 0 + 0 = 12, so 1100 in binary equals 12 in decimal.',
+  },
+  {
+    slug: 'data-representation-15',
+    question: 'What decimal (base-10) number does the binary number 11111 represent?',
+    options: ['28', '29', '30', '31'],
+    correctIndex: 3,
+    explanation:
+      'In binary, 11111 means (1×16) + (1×8) + (1×4) + (1×2) + (1×1) = 16 + 8 + 4 + 2 + 1 = 31, so 11111 in binary equals 31 in decimal.',
+  },
+  {
+    slug: 'data-representation-16',
+    question: 'How would the decimal number 9 be written in binary?',
+    options: ['1001', '1010', '1100', '1011'],
+    correctIndex: 0,
+    explanation:
+      '9 can be made from 8 + 1, which is (1×8) + (0×4) + (0×2) + (1×1), so 9 in binary is written as 1001.',
+  },
+  {
+    slug: 'data-representation-17',
+    question: 'How would the decimal number 18 be written in binary?',
+    options: ['10001', '10010', '10100', '11000'],
+    correctIndex: 1,
+    explanation:
+      '18 can be made from 16 + 2, which is (1×16) + (0×8) + (0×4) + (1×2) + (0×1), so 18 in binary is written as 10010.',
+  },
+  {
+    slug: 'data-representation-18',
+    question: 'Which of these values is best described as a "number" data type rather than a string?',
+    options: [
+      'The text "twenty-five"',
+      'The phone number digits "555-0102" used only for display',
+      'The value 25, used to calculate someone\'s age next year',
+      'A label that says "Age:"',
+    ],
+    correctIndex: 2,
+    explanation:
+      'A value is a number data type when it needs to be used in calculations, like adding 1 to someone\'s age, while text meant only for display or labels is usually stored as a string.',
+  },
+  {
+    slug: 'data-representation-19',
+    question: 'A weather app stores "isRaining" as either true or false. What data type is this?',
+    options: ['String', 'Number', 'Boolean', 'List'],
+    correctIndex: 2,
+    explanation:
+      'Since "isRaining" can only be one of two values, true or false, it is represented using the boolean data type.',
+  },
+  {
+    slug: 'data-representation-20',
+    question:
+      'Which of the following is an example of a "nested" data structure (a structure containing another structure inside it)?',
+    options: [
+      'A single number like 7',
+      'A single key-value pair like "age": 12',
+      'A dictionary where one of the values is itself a list, like "hobbies": ["chess", "art", "soccer"]',
+      'A plain string like "hello world"',
+    ],
+    correctIndex: 2,
+    explanation:
+      'A nested structure happens when one data structure is stored inside another, such as a list of hobbies stored as the value inside a larger key-value dictionary.',
+  },
+  {
+    slug: 'data-representation-21',
+    question:
+      'You want to store one student\'s full profile: their name, age, and a list of their favorite subjects. Which representation fits best?',
+    options: [
+      'A single boolean value',
+      'A plain list of just numbers',
+      'A key-value structure (dictionary) where "name" and "age" are simple values and "subjects" is a list',
+      'One long unstructured string with everything mixed together',
+    ],
+    correctIndex: 2,
+    explanation:
+      'Mixing different kinds of related information, like a name, age, and a list of subjects, fits naturally into a dictionary where each piece of data has its own labeled key, including a nested list for the subjects.',
+  },
+  {
+    slug: 'data-representation-22',
+    question:
+      'A teacher wants to record, for 30 students, their name, three quiz scores, and whether they passed. What is the most appropriate representation?',
+    options: [
+      'A single shared boolean for the whole class',
+      'A table where each row is a student and the columns are name, the three quiz scores, and pass/fail',
+      'One number that represents the entire class at once',
+      'A single string listing every student\'s name with no other information',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Since every student needs the same set of categories (name, three scores, and pass/fail), a table keeps each student\'s data organized in its own row without mixing up information between students.',
+  },
+  {
+    slug: 'data-representation-23',
+    question:
+      'Which scenario is the best fit for using a list (array) rather than a single key-value pair?',
+    options: [
+      'Storing one player\'s username paired with their score',
+      'Storing whether a single light bulb is on or off',
+      'Storing the high scores of the top 10 players, in order from highest to lowest',
+      'Storing a single sentence of text',
+    ],
+    correctIndex: 2,
+    explanation:
+      'A list is ideal when you need to keep several related items in a specific order, like the top 10 high scores ranked from highest to lowest.',
+  },
+  {
+    slug: 'data-representation-24',
+    question:
+      'A music app needs to store, for each song, its title, artist, and length in seconds, and there could be thousands of songs. Which representation works best, and why?',
+    options: [
+      'A single string per song combining everything with no separation, because it uses the least typing',
+      'A list of dictionaries, where each dictionary holds one song\'s title, artist, and length, because it keeps each song\'s details organized and easy to look up',
+      'A single boolean for the whole app, because true/false is simplest',
+      'A single shared number for all songs, because numbers are fast to compare',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Using a list of dictionaries lets each song keep its own labeled details (title, artist, length) while still being part of one big ordered collection of songs, which scales well to thousands of entries.',
+  },
+  {
+    slug: 'data-representation-25',
+    question:
+      'A small robot needs to remember the (x, y) grid coordinates of 4 obstacles it has detected. Which representation is most appropriate?',
+    options: [
+      'A single number representing all 4 obstacles combined',
+      'A list of 4 pairs of coordinates, like [(2, 3), (5, 1), (0, 4), (7, 7)]',
+      'A single boolean saying whether any obstacles exist',
+      'One long string with no clear separation between coordinates',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Since there are multiple obstacles, each needing its own x and y position, a list of coordinate pairs keeps every obstacle\'s location distinct and easy to process one at a time.',
+  },
 ]
