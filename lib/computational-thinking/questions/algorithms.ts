@@ -328,4 +328,166 @@ export const algorithms: CTQuestion[] = [
     explanation:
       'Working in a clear, organized space (like the floor) can make following the sorting steps easier and reduce mistakes, similar to how some algorithms use extra space to simplify their work.',
   },
+  {
+    slug: 'algorithms-26',
+    question:
+      'Looking up a word in a thick paper dictionary, you open to the middle, see which half the word would be in alphabetically, and repeat with that half until you find it. Which computer algorithm does this most closely match?',
+    options: [
+      'Linear search, checking every word from the first page onward',
+      'Binary search, repeatedly narrowing down to the correct half',
+      'Bubble sort, swapping neighboring words',
+      'Random search, picking pages with no plan',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Repeatedly jumping to the middle of a sorted range and eliminating half the possibilities is exactly how binary search works.',
+  },
+  {
+    slug: 'algorithms-27',
+    question:
+      'A deck of 52 cards is shuffled by an algorithm that, for each position from the last card to the first, swaps that card with a randomly chosen earlier card (including itself). What is this process an example of?',
+    options: [
+      'A sorting algorithm that puts the cards in order',
+      'A randomizing algorithm that mixes up the order of a list',
+      'A searching algorithm that finds a specific card',
+      'An algorithm that always produces the exact same order every time',
+    ],
+    correctIndex: 1,
+    explanation:
+      'This is a classic shuffling algorithm: it uses random swaps to rearrange the deck into an unpredictable order, rather than sorting or searching.',
+  },
+  {
+    slug: 'algorithms-28',
+    question:
+      'A GPS app finds a route by exploring nearby intersections first, then intersections a little farther away, gradually expanding outward until it reaches the destination, always preferring shorter paths so far. What is the main goal of this approach?',
+    options: [
+      'To visit every road in the city no matter what',
+      'To find a path to the destination while trying to minimize total travel distance or time',
+      'To guarantee the trip takes exactly one hour',
+      'To avoid using any roads that have traffic lights',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Route-finding algorithms like this expand outward from the start while tracking the shortest distance found so far, aiming to reach the destination with minimal total cost.',
+  },
+  {
+    slug: 'algorithms-29',
+    question:
+      'On a car assembly line, each station performs one specific task (attach wheels, install seats, paint the body) in a fixed order, and a new car frame enters the line every few minutes. What algorithmic idea does this best illustrate?',
+    options: [
+      'Breaking a big task into an ordered sequence of smaller steps that can each be repeated efficiently',
+      'Searching for a single defective car among thousands',
+      'Randomly assigning tasks to stations with no fixed order',
+      'Sorting cars by color before they are built',
+    ],
+    correctIndex: 0,
+    explanation:
+      'An assembly line breaks the larger task of "build a car" into a fixed sequence of smaller repeatable steps, which mirrors how algorithms break problems into ordered steps.',
+  },
+  {
+    slug: 'algorithms-30',
+    question:
+      'You have an alphabetically sorted list of 500 names and want to find one specific name. Method A checks names one at a time from the start. Method B repeatedly checks the middle of the remaining range and eliminates half each time. Which method needs fewer checks in the worst case?',
+    options: [
+      'Method A, because checking from the start is always quickest',
+      'Method B, because cutting the remaining names in half each time needs far fewer checks than going one by one',
+      'Both methods need exactly the same number of checks',
+      'Neither method can work on a sorted list of names',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Method B is binary search, which can find a name among 500 in about 9 checks, while Method A (linear search) could need up to 500 checks in the worst case.',
+  },
+  {
+    slug: 'algorithms-31',
+    question:
+      'Follow these steps: start with value = 10. Subtract 3 from value, do this 2 times total, then add 5. What is the final value of value?',
+    options: ['7', '9', '12', '4'],
+    correctIndex: 1,
+    explanation:
+      'Starting at 10, subtracting 3 twice gives 10, 7, 4, and then adding 5 gives 9, so the final value is 9.',
+  },
+  {
+    slug: 'algorithms-32',
+    question:
+      'Follow these steps: start with score = 1. Add 4 to score, repeat this 3 times total. What is the final value of score?',
+    options: ['9', '12', '13', '5'],
+    correctIndex: 2,
+    explanation:
+      'Starting at 1 and adding 4 three times gives 1, 5, 9, 13, so the final value of score is 13.',
+  },
+  {
+    slug: 'algorithms-33',
+    question:
+      'Follow these steps: start with total = 0. For each number from 1 to 5, add that number to total. What is the final value of total?',
+    options: ['10', '15', '20', '5'],
+    correctIndex: 1,
+    explanation:
+      'Adding 1, 2, 3, 4, and 5 to a running total of 0 gives 1+2+3+4+5 = 15.',
+  },
+  {
+    slug: 'algorithms-34',
+    question:
+      'An algorithm says: "While the number is not equal to 1, if the number is even divide it by 2, otherwise subtract 1 from it." Starting with the number 7, will this algorithm definitely stop?',
+    options: [
+      'No, because subtracting 1 from an odd number can go on forever',
+      'Yes, since each step makes the number smaller (dividing or subtracting), it keeps shrinking toward 1 and the loop ends',
+      'No, because dividing by 2 only works on numbers less than 7',
+      'It depends on what programming language is used',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Both actions (dividing an even number by 2 or subtracting 1 from an odd number) make the value strictly smaller, so it is guaranteed to eventually reach 1 and stop.',
+  },
+  {
+    slug: 'algorithms-35',
+    question:
+      'An algorithm is supposed to find the smallest number in a list, but it is written as: "Assume the second item is the smallest, then compare it to every other item." What problem could this cause?',
+    options: [
+      'It works perfectly for every possible list, including empty ones',
+      'It could give the wrong answer or fail if the list has only one item, since there would be no second item to start with',
+      'It will always be faster than starting with the first item',
+      'It guarantees the list becomes sorted afterward',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Starting from the second item breaks down on a one-item list, since there is no second item, showing why this version of the algorithm misses an important edge case.',
+  },
+  {
+    slug: 'algorithms-36',
+    question:
+      'Two algorithms both find all matching pairs of numbers that add up to 10 in a list of 200 numbers. Algorithm A checks every possible pair of numbers in the list. Algorithm B puts numbers into a lookup structure first and then checks each number against it once. As the list grows much larger, which approach tends to need far fewer total steps?',
+    options: [
+      'Algorithm A, since checking every pair is always the simplest approach',
+      'Algorithm B, since checking each number once against a lookup avoids the explosion of step growth from checking every pair',
+      'They always need the same number of steps for any list size',
+      'Neither algorithm can solve this problem correctly',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Checking every pair grows very quickly as the list size increases, while checking each item once against a lookup structure grows much more slowly, so Algorithm B scales better.',
+  },
+  {
+    slug: 'algorithms-37',
+    question:
+      'An algorithm for watering a row of 20 plants says: "Water the plant, then water the next plant, repeat until you have watered every plant in the row." If there are exactly 20 plants, how many times does the watering step run?',
+    options: ['19', '20', '21', '40'],
+    correctIndex: 1,
+    explanation:
+      'Since the instructions say to repeat the watering step until every plant has been watered, and there are 20 plants total, the step runs exactly 20 times.',
+  },
+  {
+    slug: 'algorithms-38',
+    question:
+      'An algorithm claims to sort any list of numbers correctly, and it passes every test you try. Why can testing alone never fully prove the algorithm is correct for all possible inputs?',
+    options: [
+      'Because testing always proves an algorithm is correct if it passes ten tests',
+      'Because there could be some untested input, perhaps an unusual edge case, where the algorithm still fails even though it passed all previous tests',
+      'Because algorithms cannot be tested at all',
+      'Because sorting algorithms never need to be tested',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Passing many tests builds confidence but cannot guarantee correctness for every possible input, since some untested edge case might still reveal a bug.',
+  },
 ]

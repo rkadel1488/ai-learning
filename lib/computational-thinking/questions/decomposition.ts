@@ -362,4 +362,172 @@ export const decomposition: CTQuestion[] = [
     explanation:
       'Each sub-task, music, decorations, tickets, and safety, represents a distinct and necessary part of running the dance, making it easier to assign, plan, and track separately.',
   },
+  {
+    slug: 'decomposition-27',
+    question:
+      'A club is organizing a charity fundraiser. Which is the best decomposition of the work?',
+    options: [
+      'Sponsor outreach, event logistics, marketing, and donation tracking',
+      'One person does everything while everyone else waits',
+      'Splitting the task into "morning tasks" and "afternoon tasks" with no other grouping',
+      'Deciding the charity\'s name and stopping there',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Sponsor outreach, logistics, marketing, and donation tracking are distinct, meaningful parts of running a fundraiser that can each be planned and worked on separately.',
+  },
+  {
+    slug: 'decomposition-28',
+    question:
+      'You are building a treehouse with friends. Which sub-tasks show good decomposition of the project?',
+    options: [
+      'Designing the frame, gathering materials, building the platform, and adding safety railings',
+      'Just picking a paint color before anything else is planned',
+      'Climbing the tree first and figuring out the rest later',
+      'Arguing about whose backyard to use and never moving on',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Breaking the treehouse project into design, materials, platform construction, and safety features covers the major stages needed to build it safely and in order.',
+  },
+  {
+    slug: 'decomposition-29',
+    question:
+      'A developer is decomposing a mobile app for tracking daily water intake. Which breakdown is most useful?',
+    options: [
+      'Logging water intake, setting daily goals, showing progress charts, and sending reminder notifications',
+      'Choosing the app icon and considering the app finished',
+      'Writing all the code in a single giant file with no separation of features',
+      'Designing only the splash screen animation in great detail',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Splitting the app into logging, goal-setting, progress charts, and reminders identifies the core features as separate, testable parts instead of one tangled task.',
+  },
+  {
+    slug: 'decomposition-30',
+    question:
+      'You are planning a weekend camping trip with your family. Which decomposition covers the task best?',
+    options: [
+      'Choosing the campsite, packing gear and food, planning activities, and arranging transportation',
+      'Only deciding which flashlight to bring',
+      'Packing the car first without knowing where you are going',
+      'Worrying about the whole trip at once without writing any list',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Dividing the trip into campsite choice, packing, activities, and transportation turns a big planning job into separate, manageable checklists.',
+  },
+  {
+    slug: 'decomposition-31',
+    question:
+      'You want to decompose your monthly allowance budget. Which grouping makes the most sense?',
+    options: [
+      'Savings, spending money, gifts for others, and emergency fund',
+      'Splitting money by the color of the bills',
+      'One single category called "money stuff" with no further detail',
+      'Randomly assigning amounts without any categories at all',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Grouping a budget into savings, spending, gifts, and an emergency fund creates meaningful categories that make it easier to track and plan how money is used.',
+  },
+  {
+    slug: 'decomposition-32',
+    question:
+      'A librarian wants to reorganize the entire library. Which decomposition is most effective?',
+    options: [
+      'Sorting books by genre, then by author within each genre, then updating the catalog system',
+      'Moving every book to a random new shelf to make it more exciting',
+      'Reorganizing only the picture books and leaving every other section untouched forever',
+      'Closing the library until someone else fixes it',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Sorting by genre, then by author, then updating the catalog breaks the reorganization into logical stages that build on each other in a sensible order.',
+  },
+  {
+    slug: 'decomposition-33',
+    question:
+      'Organizers are decomposing a sports tournament bracket with 16 teams. Which sub-tasks make sense?',
+    options: [
+      'Seeding the teams, scheduling each round, booking the venue, and arranging referees',
+      'Only deciding what color jerseys the winning team gets',
+      'Skipping the schedule and letting teams show up whenever they want',
+      'Listing every player\'s favorite snack instead of planning matches',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Seeding, scheduling rounds, booking the venue, and arranging referees are the essential pieces needed to run a tournament, and each can be handled as its own task.',
+  },
+  {
+    slug: 'decomposition-34',
+    question:
+      'In the sports tournament bracket above, the semifinal matchups cannot be scheduled until the quarterfinal results are known. What does this best illustrate about decomposition?',
+    options: [
+      'The bracket should never have been decomposed into rounds in the first place',
+      'Some sub-tasks depend on the outcome of earlier sub-tasks, so decomposition must also account for the correct order of work',
+      'Quarterfinals and semifinals should always be scheduled by two completely unrelated teams of organizers',
+      'Dependencies between rounds mean the tournament cannot be planned in advance at all',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Decomposing the bracket into rounds is still useful, but since semifinal scheduling depends on quarterfinal results, planners need to sequence the sub-tasks correctly rather than treating them as fully independent.',
+  },
+  {
+    slug: 'decomposition-35',
+    question:
+      'Two teams decompose "plan a school carnival." Team A splits it into "booths and games," "food vendors," "ticket sales," and "cleanup crew." Team B splits it into "stuff for kids" and "stuff for adults." Which decomposition is better, and why?',
+    options: [
+      'Team B, because splitting by age group is always clearer than splitting by activity type',
+      'Team A, because their categories map to distinct operational areas of the event, while Team B\'s split is vague and many carnival activities apply to both kids and adults',
+      'They are equally good because both teams created exactly the same number of categories',
+      'Team B, because fewer categories always means a simpler and better plan',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Team A\'s categories reflect real operational areas that need separate planning, while Team B\'s age-based split is ambiguous since booths, food, and tickets all serve both kids and adults.',
+  },
+  {
+    slug: 'decomposition-36',
+    question:
+      'You are decomposing the task "write a mobile app" and create over 60 tiny sub-tasks, such as "decide the exact pixel width of the back button" and "choose the font weight of one label." What is the issue here?',
+    options: [
+      'There is no issue; more sub-tasks always means better decomposition',
+      'The decomposition has gone too granular too early, creating overwhelming detail before the bigger features and structure are even defined',
+      'Pixel widths and font weights should never be considered at any point in app development',
+      'The app will now automatically run faster because of all the detail',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Jumping straight to tiny visual details before defining major features and structure makes the project harder to manage, since the big picture gets lost among minor details.',
+  },
+  {
+    slug: 'decomposition-37',
+    question:
+      'A class is decomposing "put on a school play." Which set of sub-tasks best covers the major parts of the production?',
+    options: [
+      'Casting actors, building the set, rehearsing scenes, and managing lighting and sound',
+      'Only choosing the title of the play and stopping there',
+      'Memorizing every line of every character before anything else is planned',
+      'Selling tickets first and deciding what play to perform afterward',
+    ],
+    correctIndex: 0,
+    explanation:
+      'Casting, set building, rehearsals, and lighting/sound represent the major distinct areas of producing a play, each of which can be organized and worked on separately.',
+  },
+  {
+    slug: 'decomposition-38',
+    question:
+      'After decomposing "plan a class trip to a museum" into transportation, entry tickets, lunch arrangements, and a tour schedule, what should the planners still check before finalizing everything?',
+    options: [
+      'Nothing further is needed once the categories are listed',
+      'Whether the sub-tasks fit together correctly, for example making sure the tour schedule lines up with the bus arrival and departure times',
+      'Whether the museum has the word "museum" in its official name',
+      'Whether every student likes the same exhibit',
+    ],
+    correctIndex: 1,
+    explanation:
+      'Even with good sub-tasks, planners must check that the pieces fit together logically, like ensuring the tour schedule matches the transportation timing, since decomposed parts of a plan still need to connect.',
+  },
 ]
