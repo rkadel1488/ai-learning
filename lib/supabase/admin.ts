@@ -21,3 +21,14 @@ export function createAuthAdminClient() {
     { auth: { autoRefreshToken: false, persistSession: false } }
   )
 }
+
+// Raw typed client for DB writes that must bypass RLS.
+// createServerClient forwards the user's cookie-based JWT which keeps RLS active
+// even with the service-role key — this client avoids that by never sending cookies.
+export function createDbAdminClient() {
+  return createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  )
+}
