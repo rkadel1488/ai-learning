@@ -1,12 +1,18 @@
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { isAdminEmail } from '@/lib/admin'
+import { ADMIN_UNLOCK_COOKIE, isValidCookieValue } from '@/lib/admin-unlock'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
   if (!isAdminEmail(user.email)) redirect('/dashboard')
+
+  const cookieStore = await cookies()
+  const sessionValue = cookieStore.get(ADMIN_UNLOCK_COOKIE)?.value ?? ''
+  if (!isValidCookieValue(sessionValue)) redirect('/admin/unlock')
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
