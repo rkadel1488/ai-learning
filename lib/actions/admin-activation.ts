@@ -1,6 +1,6 @@
 'use server'
 import { revalidatePath } from 'next/cache'
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createAdminClient, createAuthAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { isAdminEmail } from '@/lib/admin'
 
@@ -77,6 +77,26 @@ export async function manuallyActivateUser(
   }
 
   const supabase = await createAdminClient()
+
+  // Ensure a public.users row exists (purchases FK requires it).
+  // Users who signed up but never completed onboarding won't have one.
+  const { data: existingUser } = await supabase
+    .from('users')
+    .select('id')
+    .eq('id', userId)
+    .single()
+
+  if (!existingUser) {
+    const authAdmin = createAuthAdminClient()
+    const { data: authData } = await authAdmin.auth.admin.getUserById(userId)
+    if (!authData?.user) return { error: 'User not found in auth system' }
+    const { error: upsertError } = await supabase.from('users').upsert({
+      id: userId,
+      email: authData.user.email ?? '',
+      role: 'parent',
+    })
+    if (upsertError) return { error: upsertError.message }
+  }
 
   const { error: purchaseError } = await supabase.from('purchases').insert({
     user_id: userId,

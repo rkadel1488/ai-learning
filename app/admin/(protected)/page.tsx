@@ -1,4 +1,4 @@
-import { createAdminClient } from '@/lib/supabase/admin'
+import { createAdminClient, createAuthAdminClient } from '@/lib/supabase/admin'
 import { getPendingActivationUsers } from '@/lib/actions/admin-activation'
 import { ManualActivationPanel } from '@/components/admin/ManualActivationPanel'
 import { LearnerTable } from '@/components/admin/LearnerTable'
@@ -54,21 +54,39 @@ export default async function AdminDashboardPage() {
     progressByChild.set(row.child_id, list)
   }
 
+  // Fetch auth emails for parents not yet in public.users (signed up but not onboarded)
+  const userMap = new Map(users.map(u => [u.id, u]))
+  const missingParentIds = [...new Set(
+    children.map(c => c.parent_id).filter((id): id is string => !!id && !userMap.has(id))
+  )]
+  const authEmailMap = new Map<string, string>()
+  if (missingParentIds.length > 0) {
+    const authAdmin = createAuthAdminClient()
+    await Promise.all(missingParentIds.map(async id => {
+      const { data } = await authAdmin.auth.admin.getUserById(id)
+      if (data?.user?.email) authEmailMap.set(id, data.user.email)
+    }))
+  }
+
   const childRows = children.map(child => {
-    const owner = users.find(u => u.id === child.parent_id) ?? null
+    const owner = userMap.get(child.parent_id ?? '') ?? null
     const rows = progressByChild.get(child.id) ?? []
     const answered = rows.reduce((sum, r) => sum + r.questions_answered, 0)
     const correct = rows.reduce((sum, r) => sum + r.questions_correct, 0)
     const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : null
     const completed = rows.filter(r => r.completed_at).length
+    const parentId = child.parent_id ?? null
+    const authEmail = parentId && !owner ? (authEmailMap.get(parentId) ?? null) : null
     return {
       child,
       owner,
+      parentId,
+      authEmail,
       topicsCompleted: completed,
       accuracy,
       friends: friendCountByChild.get(child.id) ?? 0,
-      hasAccess: owner ? hasActiveAccess(owner.id) : false,
-      purchase: owner ? latestPurchaseByUser.get(owner.id) ?? null : null,
+      hasAccess: owner ? hasActiveAccess(owner.id) : (parentId ? hasActiveAccess(parentId) : false),
+      purchase: owner ? latestPurchaseByUser.get(owner.id) ?? null : (parentId ? latestPurchaseByUser.get(parentId) ?? null : null),
     }
   })
 
