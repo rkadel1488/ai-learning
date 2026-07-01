@@ -1,4 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getPendingActivationUsers } from '@/lib/actions/admin-activation'
+import { ManualActivationPanel } from '@/components/admin/ManualActivationPanel'
 
 const trackLabel: Record<string, string> = {
   story: 'Story · 6–10',
@@ -11,13 +13,16 @@ const PURCHASE_VALIDITY_MS = 365 * 24 * 60 * 60 * 1000
 export default async function AdminDashboardPage() {
   const supabase = await createAdminClient()
 
-  const [usersRes, childrenRes, progressRes, purchasesRes, friendshipsRes, topicsRes] = await Promise.all([
+  const [pendingActivations, [usersRes, childrenRes, progressRes, purchasesRes, friendshipsRes, topicsRes]] = await Promise.all([
+    getPendingActivationUsers(),
+    Promise.all([
     supabase.from('users').select('id, email, name, role, created_at').order('created_at', { ascending: false }),
     supabase.from('children').select('id, parent_id, name, age, track, trophies, created_at'),
     supabase.from('progress').select('child_id, topic_id, questions_answered, questions_correct, score_pct, completed_at'),
     supabase.from('purchases').select('user_id, type, purchased_at').order('purchased_at', { ascending: false }),
     supabase.from('friendships').select('requester_id, addressee_id, status').eq('status', 'accepted'),
-    supabase.from('topics').select('id'),
+      supabase.from('topics').select('id'),
+    ]),
   ])
 
   const users = usersRes.data ?? []
@@ -90,6 +95,8 @@ export default async function AdminDashboardPage() {
         <SummaryCard icon="💳" label="Active Subscriptions" value={activeSubscribers} accent="emerald" />
         <SummaryCard icon="🤝" label="Friend Connections" value={totalFriendships} accent="amber" />
       </div>
+
+      <ManualActivationPanel initialUsers={pendingActivations} />
 
       {/* Per-user / per-child table */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
