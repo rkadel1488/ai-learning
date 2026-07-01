@@ -1,12 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getPendingActivationUsers } from '@/lib/actions/admin-activation'
 import { ManualActivationPanel } from '@/components/admin/ManualActivationPanel'
-
-const trackLabel: Record<string, string> = {
-  story: 'Story · 6–10',
-  levels: 'Levels · 11–15',
-  sandbox: 'Sandbox · 16–20',
-}
+import { LearnerTable } from '@/components/admin/LearnerTable'
 
 const PURCHASE_VALIDITY_MS = 365 * 24 * 60 * 60 * 1000
 
@@ -98,64 +93,7 @@ export default async function AdminDashboardPage() {
 
       <ManualActivationPanel initialUsers={pendingActivations} />
 
-      {/* Per-user / per-child table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
-          <h2 className="font-semibold text-white">Learner Progress &amp; Access</h2>
-          <span className="text-xs text-slate-400">{childRows.length} learner{childRows.length === 1 ? '' : 's'}</span>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-slate-500 text-xs uppercase tracking-wide border-b border-slate-800">
-                <th className="px-5 py-3 font-medium">Learner</th>
-                <th className="px-5 py-3 font-medium">Parent / Account</th>
-                <th className="px-5 py-3 font-medium">Track</th>
-                <th className="px-5 py-3 font-medium">Topics Done</th>
-                <th className="px-5 py-3 font-medium">Accuracy</th>
-                <th className="px-5 py-3 font-medium">Trophies</th>
-                <th className="px-5 py-3 font-medium">Friends</th>
-                <th className="px-5 py-3 font-medium">Full Access</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800">
-              {childRows.map(({ child, owner, topicsCompleted, accuracy, friends, hasAccess, purchase }) => (
-                <tr key={child.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="px-5 py-3">
-                    <div className="font-medium text-white">{child.name}</div>
-                    <div className="text-xs text-slate-500">Age {child.age}</div>
-                  </td>
-                  <td className="px-5 py-3">
-                    <div className="text-slate-300">{owner?.name ?? '—'}</div>
-                    <div className="text-xs text-slate-500">{owner?.email ?? '—'}</div>
-                  </td>
-                  <td className="px-5 py-3 text-slate-300">{trackLabel[child.track] ?? child.track}</td>
-                  <td className="px-5 py-3 text-slate-300 tabular-nums">{topicsCompleted} / {totalTopics}</td>
-                  <td className="px-5 py-3 text-slate-300 tabular-nums">{accuracy !== null ? `${accuracy}%` : '—'}</td>
-                  <td className="px-5 py-3 text-amber-300 tabular-nums">🏆 {child.trophies}</td>
-                  <td className="px-5 py-3 text-slate-300 tabular-nums">{friends}</td>
-                  <td className="px-5 py-3">
-                    {hasAccess ? (
-                      <span className="inline-flex items-center gap-1.5 text-emerald-400 text-xs font-semibold bg-emerald-400/10 px-2 py-1 rounded-full">
-                        ✅ {purchase?.type ?? 'active'}
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1.5 text-slate-500 text-xs font-semibold bg-slate-800 px-2 py-1 rounded-full">
-                        — none
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-              {childRows.length === 0 && (
-                <tr>
-                  <td colSpan={8} className="px-5 py-8 text-center text-slate-500">No learners registered yet.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <LearnerTable rows={childRows} totalTopics={totalTopics} />
 
       {/* All accounts table */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
