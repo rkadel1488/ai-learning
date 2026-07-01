@@ -1,6 +1,6 @@
 'use server'
 import { revalidatePath } from 'next/cache'
-import { createAdminClient, createAuthAdminClient } from '@/lib/supabase/admin'
+import { createAdminClient, createAuthAdminClient, createDbAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { isAdminEmail } from '@/lib/admin'
 
@@ -76,11 +76,14 @@ export async function manuallyActivateUser(
     return { error: 'Unauthorized' }
   }
 
-  const supabase = await createAdminClient()
+  // Use the raw (cookie-free) client for all writes so service-role key
+  // actually bypasses RLS. createAdminClient uses @supabase/ssr which
+  // forwards the user's cookie JWT and keeps RLS active for writes.
+  const db = createDbAdminClient()
 
   // Ensure a public.users row exists (purchases FK requires it).
   // Users who signed up but never completed onboarding won't have one.
-  const { data: existingUser, error: lookupError } = await supabase
+  const { data: existingUser, error: lookupError } = await db
     .from('users')
     .select('id')
     .eq('id', userId)
@@ -94,7 +97,7 @@ export async function manuallyActivateUser(
     if (authError) return { error: `Auth lookup failed: ${authError.message}` }
     if (!authData?.user) return { error: `No auth account found for ID ${userId}` }
 
-    const { error: upsertError } = await supabase.from('users').upsert(
+    const { error: upsertError } = await db.from('users').upsert(
       { id: userId, email: authData.user.email ?? '', role: 'parent' },
       { onConflict: 'id', ignoreDuplicates: true },
     )
@@ -102,7 +105,7 @@ export async function manuallyActivateUser(
   }
 
   // Check for an existing active purchase to avoid duplicate inserts
-  const { data: existingPurchase } = await supabase
+  const { data: existingPurchase } = await db
     .from('purchases')
     .select('id')
     .eq('user_id', userId)
@@ -110,7 +113,7 @@ export async function manuallyActivateUser(
     .maybeSingle()
 
   if (!existingPurchase) {
-    const { error: purchaseError } = await supabase.from('purchases').insert({
+    const { error: purchaseError } = await db.from('purchases').insert({
       user_id: userId,
       amount: 1000,
       currency: 'NPR',
@@ -120,7 +123,7 @@ export async function manuallyActivateUser(
   }
 
   if (paymentRequestId) {
-    await supabase
+    await db
       .from('payment_requests')
       .update({ status: 'approved', reviewed_at: new Date().toISOString() })
       .eq('id', paymentRequestId)
@@ -139,9 +142,9 @@ export async function manuallyActivateByEmail(
     return { error: 'Unauthorized' }
   }
 
-  const supabase = await createAdminClient()
+  const db = createDbAdminClient()
 
-  const { data: user } = await supabase
+  const { data: user } = await db
     .from('users')
     .select('id')
     .eq('email', email.trim().toLowerCase())
@@ -149,7 +152,7 @@ export async function manuallyActivateByEmail(
 
   if (!user) return { error: `No account found for "${email}"` }
 
-  const { error: purchaseError } = await supabase.from('purchases').insert({
+  const { error: purchaseError } = await db.from('purchases').insert({
     user_id: user.id,
     amount: 1000,
     currency: 'NPR',
@@ -159,7 +162,7 @@ export async function manuallyActivateByEmail(
   if (purchaseError) return { error: purchaseError.message }
 
   // Approve any pending payment request for this user
-  await supabase
+  await db
     .from('payment_requests')
     .update({ status: 'approved', reviewed_at: new Date().toISOString() })
     .eq('user_id', user.id)
