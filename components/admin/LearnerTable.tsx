@@ -5,6 +5,8 @@ import { manuallyActivateUser } from '@/lib/actions/admin-activation'
 export type LearnerRow = {
   child: { id: string; name: string; age: number; track: string; trophies: number }
   owner: { id: string; name: string | null; email: string } | null
+  parentId: string | null
+  authEmail: string | null
   topicsCompleted: number
   accuracy: number | null
   friends: number
@@ -50,8 +52,10 @@ export function LearnerTable({ rows, totalTopics }: { rows: LearnerRow[]; totalT
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800">
-            {rows.map(({ child, owner, topicsCompleted, accuracy, friends, hasAccess, purchase }) => {
-              const state = owner ? (rowState[owner.id] ?? 'idle') : 'idle'
+            {rows.map(({ child, owner, parentId, authEmail, topicsCompleted, accuracy, friends, hasAccess, purchase }) => {
+              // Use owner.id if available, fall back to parentId for auth-only users
+              const activatableId = owner?.id ?? parentId
+              const state = activatableId ? (rowState[activatableId] ?? 'idle') : 'idle'
               const activated = state === 'done' || hasAccess
 
               return (
@@ -61,8 +65,19 @@ export function LearnerTable({ rows, totalTopics }: { rows: LearnerRow[]; totalT
                     <div className="text-xs text-slate-500">Age {child.age}</div>
                   </td>
                   <td className="px-5 py-3">
-                    <div className="text-slate-300">{owner?.name ?? '—'}</div>
-                    <div className="text-xs text-slate-500">{owner?.email ?? '—'}</div>
+                    {owner ? (
+                      <>
+                        <div className="text-slate-300">{owner.name ?? '—'}</div>
+                        <div className="text-xs text-slate-500">{owner.email}</div>
+                      </>
+                    ) : authEmail ? (
+                      <>
+                        <div className="text-slate-500 text-xs italic">not onboarded</div>
+                        <div className="text-xs text-slate-500">{authEmail}</div>
+                      </>
+                    ) : (
+                      <div className="text-slate-600 text-xs">—</div>
+                    )}
                   </td>
                   <td className="px-5 py-3 text-slate-300">{trackLabel[child.track] ?? child.track}</td>
                   <td className="px-5 py-3 text-slate-300 tabular-nums">{topicsCompleted} / {totalTopics}</td>
@@ -76,23 +91,21 @@ export function LearnerTable({ rows, totalTopics }: { rows: LearnerRow[]; totalT
                       </span>
                     ) : state === 'error' ? (
                       <button
-                        onClick={() => owner && activate(owner.id)}
+                        onClick={() => activatableId && activate(activatableId)}
                         className="text-xs font-semibold px-3 py-1 rounded-lg bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30 transition"
                       >
                         Error — retry
                       </button>
-                    ) : owner ? (
+                    ) : activatableId ? (
                       <button
-                        onClick={() => activate(owner.id)}
+                        onClick={() => activate(activatableId)}
                         disabled={state === 'loading'}
                         className="text-xs font-semibold px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white transition"
                       >
                         {state === 'loading' ? 'Activating…' : 'Activate'}
                       </button>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 text-slate-500 text-xs font-semibold bg-slate-800 px-2 py-1 rounded-full">
-                        — none
-                      </span>
+                      <span className="text-slate-600 text-xs">—</span>
                     )}
                   </td>
                 </tr>
