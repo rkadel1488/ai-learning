@@ -100,9 +100,19 @@ export function ManualActivationPanel({ initialUsers }: { initialUsers: PendingA
                         {state === 'done' ? (
                           <span className="text-emerald-400 text-xs font-semibold">✅ Activated</span>
                         ) : state === 'error' ? (
-                          <span className="text-red-400 text-xs" title={rowError[u.userId]}>
-                            Failed — try again
-                          </span>
+                          <div className="space-y-1">
+                            <button
+                              onClick={() => activate(u.userId, u.paymentRequestId)}
+                              className="text-xs font-semibold px-3 py-1 rounded-lg bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30 transition"
+                            >
+                              Error — retry
+                            </button>
+                            {rowError[u.userId] && (
+                              <div className="text-xs text-red-400/80 max-w-[200px] break-words">
+                                {rowError[u.userId]}
+                              </div>
+                            )}
+                          </div>
                         ) : (
                           <button
                             onClick={() => activate(u.userId, u.paymentRequestId)}
