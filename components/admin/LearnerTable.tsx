@@ -24,11 +24,18 @@ type RowState = 'idle' | 'loading' | 'done' | 'error'
 
 export function LearnerTable({ rows, totalTopics }: { rows: LearnerRow[]; totalTopics: number }) {
   const [rowState, setRowState] = useState<Record<string, RowState>>({})
+  const [rowError, setRowError] = useState<Record<string, string>>({})
 
   async function activate(userId: string) {
     setRowState(s => ({ ...s, [userId]: 'loading' }))
+    setRowError(e => { const n = { ...e }; delete n[userId]; return n })
     const result = await manuallyActivateUser(userId, null)
-    setRowState(s => ({ ...s, [userId]: result.error ? 'error' : 'done' }))
+    if (result.error) {
+      setRowState(s => ({ ...s, [userId]: 'error' }))
+      setRowError(e => ({ ...e, [userId]: result.error! }))
+    } else {
+      setRowState(s => ({ ...s, [userId]: 'done' }))
+    }
   }
 
   return (
@@ -90,12 +97,19 @@ export function LearnerTable({ rows, totalTopics }: { rows: LearnerRow[]; totalT
                         ✅ {state === 'done' ? 'esewa' : (purchase?.type ?? 'active')}
                       </span>
                     ) : state === 'error' ? (
-                      <button
-                        onClick={() => activatableId && activate(activatableId)}
-                        className="text-xs font-semibold px-3 py-1 rounded-lg bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30 transition"
-                      >
-                        Error — retry
-                      </button>
+                      <div className="space-y-1">
+                        <button
+                          onClick={() => activatableId && activate(activatableId)}
+                          className="text-xs font-semibold px-3 py-1 rounded-lg bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/30 transition"
+                        >
+                          Error — retry
+                        </button>
+                        {activatableId && rowError[activatableId] && (
+                          <div className="text-xs text-red-400/80 max-w-[200px] break-words">
+                            {rowError[activatableId]}
+                          </div>
+                        )}
+                      </div>
                     ) : activatableId ? (
                       <button
                         onClick={() => activate(activatableId)}

@@ -80,32 +80,44 @@ export async function manuallyActivateUser(
 
   // Ensure a public.users row exists (purchases FK requires it).
   // Users who signed up but never completed onboarding won't have one.
-  const { data: existingUser } = await supabase
+  const { data: existingUser, error: lookupError } = await supabase
     .from('users')
     .select('id')
     .eq('id', userId)
-    .single()
+    .maybeSingle()
+
+  if (lookupError) return { error: `User lookup failed: ${lookupError.message}` }
 
   if (!existingUser) {
     const authAdmin = createAuthAdminClient()
-    const { data: authData } = await authAdmin.auth.admin.getUserById(userId)
-    if (!authData?.user) return { error: 'User not found in auth system' }
-    const { error: upsertError } = await supabase.from('users').upsert({
-      id: userId,
-      email: authData.user.email ?? '',
-      role: 'parent',
-    })
-    if (upsertError) return { error: upsertError.message }
+    const { data: authData, error: authError } = await authAdmin.auth.admin.getUserById(userId)
+    if (authError) return { error: `Auth lookup failed: ${authError.message}` }
+    if (!authData?.user) return { error: `No auth account found for ID ${userId}` }
+
+    const { error: upsertError } = await supabase.from('users').upsert(
+      { id: userId, email: authData.user.email ?? '', role: 'parent' },
+      { onConflict: 'id', ignoreDuplicates: true },
+    )
+    if (upsertError) return { error: `Failed to create user record: ${upsertError.message}` }
   }
 
-  const { error: purchaseError } = await supabase.from('purchases').insert({
-    user_id: userId,
-    amount: 1000,
-    currency: 'NPR',
-    type: 'esewa',
-  })
+  // Check for an existing active purchase to avoid duplicate inserts
+  const { data: existingPurchase } = await supabase
+    .from('purchases')
+    .select('id')
+    .eq('user_id', userId)
+    .gte('purchased_at', new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString())
+    .maybeSingle()
 
-  if (purchaseError) return { error: purchaseError.message }
+  if (!existingPurchase) {
+    const { error: purchaseError } = await supabase.from('purchases').insert({
+      user_id: userId,
+      amount: 1000,
+      currency: 'NPR',
+      type: 'esewa',
+    })
+    if (purchaseError) return { error: `Failed to create purchase: ${purchaseError.message}` }
+  }
 
   if (paymentRequestId) {
     await supabase
