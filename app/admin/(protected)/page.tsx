@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getPendingActivationUsers } from '@/lib/actions/admin-activation'
 import { ManualActivationPanel } from '@/components/admin/ManualActivationPanel'
 import { LearnerTable } from '@/components/admin/LearnerTable'
+import { AccountsTable } from '@/components/admin/AccountsTable'
 
 const PURCHASE_VALIDITY_MS = 365 * 24 * 60 * 60 * 1000
 
@@ -95,49 +96,17 @@ export default async function AdminDashboardPage() {
 
       <LearnerTable rows={childRows} totalTopics={totalTopics} />
 
-      {/* All accounts table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
-          <h2 className="font-semibold text-white">All Accounts</h2>
-          <span className="text-xs text-slate-400">{users.length} account{users.length === 1 ? '' : 's'}</span>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left text-slate-500 text-xs uppercase tracking-wide border-b border-slate-800">
-                <th className="px-5 py-3 font-medium">Name</th>
-                <th className="px-5 py-3 font-medium">Email</th>
-                <th className="px-5 py-3 font-medium">Role</th>
-                <th className="px-5 py-3 font-medium">Joined</th>
-                <th className="px-5 py-3 font-medium">Full Access</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800">
-              {users.map(u => {
-                const access = hasActiveAccess(u.id)
-                const purchase = latestPurchaseByUser.get(u.id) ?? null
-                return (
-                  <tr key={u.id} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="px-5 py-3 text-white font-medium">{u.name ?? '—'}</td>
-                    <td className="px-5 py-3 text-slate-400">{u.email}</td>
-                    <td className="px-5 py-3 text-slate-300 capitalize">{u.role}</td>
-                    <td className="px-5 py-3 text-slate-400">{new Date(u.created_at).toLocaleDateString()}</td>
-                    <td className="px-5 py-3">
-                      {access ? (
-                        <span className="text-emerald-400 text-xs font-semibold">
-                          ✅ {purchase?.type} · {purchase ? new Date(purchase.purchased_at).toLocaleDateString() : ''}
-                        </span>
-                      ) : (
-                        <span className="text-slate-500 text-xs">— none</span>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <AccountsTable
+        accounts={users.map(u => ({
+          id: u.id,
+          name: u.name,
+          email: u.email,
+          role: u.role,
+          created_at: u.created_at,
+          hasAccess: hasActiveAccess(u.id),
+          purchase: latestPurchaseByUser.get(u.id) ?? null,
+        }))}
+      />
     </div>
   )
 }
